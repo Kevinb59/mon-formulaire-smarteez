@@ -3,88 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire Smarteez</title>
+    <title>Commande de Coque Personnalisée - Smarteez</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
+            background-color: #b7d397;
+            color: #333;
             padding: 20px;
+            margin: 0;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             background-color: #ffffff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
         h1 {
             text-align: center;
-            color: #333;
+            color: #5b287c;
+            font-size: 4em;
+        }
+        h2 {
+            text-align: center;
+            color: #5b287c;
+            font-size: 2em;
         }
         label {
             font-weight: bold;
-            display: block;
-            margin-top: 10px;
             color: #333;
         }
-        input[type="text"], input[type="email"], input[type="tel"], input[type="text"], textarea, button {
+        input, select, textarea, button {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
-            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
         button {
-            background-color: #5cb85c;
+            background-color: #5b287c;
             color: white;
             border: none;
             cursor: pointer;
+            font-size: 1.1em;
         }
         button:hover {
-            background-color: #4cae4c;
+            background-color: #472362;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Formulaire de commande Smarteez</h1>
-        <form id="orderForm" action="https://script.google.com/macros/s/AKfycbxjxC6Di6jjs2AUFFVMAlJfz48XNBcHwacwXB1P9H4DPuiADddvd3B2v24__tlwJDui6g/exec" method="POST">
-            <label for="firstName">Prénom :</label>
-            <input type="text" id="firstName" name="firstName" placeholder="Votre prénom" required>
-            
-            <label for="lastName">Nom :</label>
-            <input type="text" id="lastName" name="lastName" placeholder="Votre nom" required>
 
-            <label for="email">Email :</label>
-            <input type="email" id="email" name="email" placeholder="Votre email" required>
-            
-            <label for="phone">Téléphone :</label>
-            <input type="tel" id="phone" name="phone" placeholder="Votre numéro de téléphone" required>
+<div class="container">
+    <h1>Smarteez</h1>
+    <h2>Commande de Coque Personnalisée</h2>
+    
+    <form id="orderForm" action="https://script.google.com/macros/s/AKfycbxjxC6Di6jjs2AUFFVMAlJfz48XNBcHwacwXB1P9H4DPuiADddvd3B2v24__tlwJDui6g/exec" method="POST">
+        <label for="firstName">Prénom :</label>
+        <input type="text" id="firstName" name="firstName" placeholder="Votre prénom" required>
+        
+        <label for="lastName">Nom :</label>
+        <input type="text" id="lastName" name="lastName" placeholder="Votre nom" required>
 
-            <!-- Décomposition de l'adresse -->
-            <label for="address">Adresse :</label>
-            <input type="text" id="address" name="address" placeholder="Numéro et rue" required>
+        <label for="email">Email :</label>
+        <input type="email" id="email" name="email" placeholder="Votre email" required>
 
-            <label for="address2">Complément d'adresse :</label>
-            <input type="text" id="address2" name="address2" placeholder="Complément d'adresse">
+        <label for="phone">Téléphone :</label>
+        <input type="tel" id="phone" name="phone" placeholder="Votre numéro de téléphone" required>
 
-            <label for="city">Ville :</label>
-            <input type="text" id="city" name="city" placeholder="Ville" required>
+        <!-- Adresse décomposée -->
+        <label for="address">Adresse :</label>
+        <input type="text" id="address" name="address" placeholder="Numéro et rue" required>
 
-            <label for="postalCode">Code Postal :</label>
-            <input type="text" id="postalCode" name="postalCode" placeholder="Code Postal" required>
-            
-            <label for="phoneBrand">Marque de téléphone :</label>
-            <input type="text" id="phoneBrand" name="phoneBrand" placeholder="Marque de votre téléphone" required>
+        <label for="address2">Complément d'adresse :</label>
+        <input type="text" id="address2" name="address2" placeholder="Complément d'adresse">
 
-            <label for="phoneModel">Modèle de téléphone :</label>
-            <input type="text" id="phoneModel" name="phoneModel" placeholder="Modèle de votre téléphone" required>
+        <label for="city">Ville :</label>
+        <input type="text" id="city" name="city" placeholder="Ville" required>
 
-            <label for="customText">Texte personnalisé :</label>
-            <textarea id="customText" name="customText" placeholder="Texte personnalisé pour votre coque" rows="4" required></textarea>
+        <label for="postalCode">Code Postal :</label>
+        <input type="text" id="postalCode" name="postalCode" placeholder="Code Postal" required>
 
-            <button type="submit">Soumettre la commande</button>
-        </form>
-    </div>
+        <!-- Informations sur le téléphone -->
+        <label for="phoneBrand">Marque de téléphone :</label>
+        <input type="text" id="phoneBrand" name="phoneBrand" placeholder="Marque de votre téléphone" required>
+
+        <label for="phoneModel">Modèle de téléphone :</label>
+        <input type="text" id="phoneModel" name="phoneModel" placeholder="Modèle de votre téléphone" required>
+
+        <label for="customText">Texte personnalisé :</label>
+        <textarea id="customText" name="customText" placeholder="Texte personnalisé pour votre coque" rows="4" required></textarea>
+
+        <button type="submit">Soumettre la commande</button>
+    </form>
+</div>
+
 </body>
 </html>
