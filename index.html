@@ -3,101 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commande de coque personnalisée - Smarteez</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #b7d397;
-            color: #333;
-            padding: 20px;
-            margin: 0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #5b287c;
-            font-size: 4em;
-        }
-        h2 {
-            text-align: center;
-            color: #5b287c;
-            font-size: 2em;
-        }
-        label {
-            font-weight: bold;
-            color: #333;
-        }
-        input, select, textarea, button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background-color: #5b287c;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1em;
-        }
-        button:hover {
-            background-color: #472362;
-        }
-    </style>
+    <title>Formulaire Smarteez</title>
 </head>
 <body>
-
-<div class="container">
-    <h1>Smarteez</h1>
-    <h2>Commande de coque personnalisée</h2>
-    
-    <form id="orderForm" action="https://script.google.com/macros/s/TON_ID_SCRIPT/exec" method="POST">
-    <label for="firstName">Prénom :</label>
-    <input type="text" id="firstName" name="firstName" placeholder="Votre prénom" required>
-    
-    <label for="lastName">Nom :</label>
-    <input type="text" id="lastName" name="lastName" placeholder="Votre nom" required>
-
-    <label for="email">Email :</label>
-    <input type="email" id="email" name="email" placeholder="Votre email" required>
-
-    <label for="phone">Téléphone :</label>
-    <input type="tel" id="phone" name="phone" placeholder="Votre numéro de téléphone" required>
-
-    <!-- Adresse décomposée -->
-    <label for="address">Adresse :</label>
-    <input type="text" id="address" name="address" placeholder="Numéro et rue" required>
-
-    <label for="address2">Complément d'adresse :</label>
-    <input type="text" id="address2" name="address2" placeholder="Complément d'adresse">
-
-    <label for="city">Ville :</label>
-    <input type="text" id="city" name="city" placeholder="Ville" required>
-
-    <label for="postalCode">Code Postal :</label>
-    <input type="text" id="postalCode" name="postalCode" placeholder="Code Postal" required>
-
-    <label for="phoneBrand">Marque de téléphone :</label>
-    <input type="text" id="phoneBrand" name="phoneBrand" placeholder="Marque de votre téléphone" required>
-
-    <label for="phoneModel">Modèle de téléphone :</label>
-    <input type="text" id="phoneModel" name="phoneModel" placeholder="Modèle de votre téléphone" required>
-
-    <label for="customText">Texte personnalisé :</label>
-    <textarea id="customText" name="customText" placeholder="Texte personnalisé pour votre coque" rows="4" required></textarea>
-
-    <button type="submit">Soumettre la commande</button>
-</form>
-
-</div>
-
+    <h1>Formulaire de commande</h1>
+    <form id="orderForm" action="https://script.google.com/macros/s/TON_ID_SCRIPT/exec" method="POST" enctype="multipart/form-data">
+        <label for="firstName">Prénom :</label>
+        <input type="text" id="firstName" name="firstName" required>
+        
+        <label for="lastName">Nom :</label>
+        <input type="text" id="lastName" name="lastName" required>
+        
+        <label for="email">Email :</label>
+        <input type="email" id="email" name="email" required>
+        
+        <button type="submit">Soumettre la commande</button>
+    </form>
 </body>
 </html>
