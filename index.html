@@ -105,5 +105,54 @@
     </form>
 </div>
 
+<!-- Script pour uploader sur Cloudinary -->
+<script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+
+<script>
+    const form = document.getElementById('orderForm');
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault(); // Empêche le formulaire de soumettre immédiatement
+
+        const fileInput = document.getElementById('file');
+        const file = fileInput.files[0];
+        
+        if (file) {
+            // Cloudinary upload
+            const cloudName = 'dwjkmwlyb';  // Remplacez par votre cloud_name
+            const uploadPreset = 'smarteez_orders'; // Remplacez par votre upload_preset
+
+            const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', uploadPreset);
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.secure_url) {
+                    // Image envoyée avec succès, maintenant soumettez le formulaire avec le lien de l'image
+                    const imageUrl = data.secure_url;
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'imageUrl';
+                    hiddenInput.value = imageUrl;
+                    form.appendChild(hiddenInput);
+
+                    form.submit(); // Soumet le formulaire une fois l'image téléchargée
+                }
+            } catch (error) {
+                console.error('Erreur lors de l\'upload vers Cloudinary:', error);
+            }
+        } else {
+            form.submit(); // Soumet le formulaire si aucun fichier n'est sélectionné
+        }
+    });
+</script>
+
 </body>
 </html>
