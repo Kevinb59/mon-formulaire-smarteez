@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>21 Commande de coque personnalisée - Smarteez</title>
+    <title>Smarteez - Commande de coque personnalisée</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,9 +57,10 @@
 
 <div class="container">
     <h1>Smarteez</h1>
-    <h2>Commande de Coque Personnalisée</h2>
+    <h2>Commande de coque personnalisée</h2>
+    <h3>Expédition sous 72h</h3>
     
-    <!-- Formulaire mis à jour -->
+    <!-- Formulaire mis à jour avec intégration du paiement -->
     <form id="orderForm" action="https://script.google.com/macros/s/AKfycbxydyS1XMFNlsLhU91w4NdzDjb3qilEddRiDRmyYmRDM4G1b_pgRJRsVpfniAX-YMq3Pw/exec" method="POST" enctype="multipart/form-data">
         <label for="firstName">Prénom :</label>
         <input type="text" id="firstName" name="firstName" placeholder="Votre prénom" required>
@@ -95,35 +96,112 @@
 
         <!-- Champ pour télécharger une image -->
         <label for="file">Téléchargez votre image :</label>
-        <input type="file" id="file" name="file" accept="image/*">
+        <input type="file" id="file" name="file" accept="image/*" required>
 
         <!-- Texte personnalisé -->
-        <label for="customText">Texte personnalisé :</label>
+        <label for="customText">Texte personnalisé (optionnel) :</label>
         <textarea id="customText" name="customText" placeholder="Texte personnalisé pour votre coque" rows="4"></textarea>
 
-        <button type="submit">Soumettre la commande</button>
+        <!-- Choix du mode de paiement -->
+        <h2>Choisissez votre méthode de paiement :</h2>
+
+        <div>
+            <label>
+                <input type="radio" name="paymentMethod" value="paypal" required>
+                PayPal
+            </label>
+            <label>
+                <input type="radio" name="paymentMethod" value="card" required>
+                Carte Bancaire (via Stripe)
+            </label>
+        </div>
+
+        <!-- Bouton PayPal -->
+        <div id="paypal-button-container" style="display:none;"></div>
+
+        <!-- Champ Stripe pour carte bancaire -->
+        <div id="card-element" style="display:none;"></div>
+
+        <!-- Bouton de soumission pour Stripe -->
+        <button id="submitOrder" style="display:none;">Payer et soumettre la commande</button>
     </form>
 </div>
 
-<!-- Script pour uploader sur Cloudinary et envoyer le formulaire -->
+<!-- Script pour uploader sur Cloudinary et gérer le paiement -->
 <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=VOTRE_CLIENT_ID_PAYPAL&currency=EUR"></script>
+<script src="https://js.stripe.com/v3/"></script>
 
 <script>
     const form = document.getElementById('orderForm');
+    const paymentOptions = document.querySelectorAll('input[name="paymentMethod"]');
+    const paypalButtonContainer = document.getElementById('paypal-button-container');
+    const cardElement = document.getElementById('card-element');
+    const submitOrderButton = document.getElementById('submitOrder');
     
-    // Capture l'événement de soumission du formulaire
-    form.addEventListener('submit', async function(event) {
-        event.preventDefault(); // Empêche le formulaire de soumettre immédiatement
-        console.log("Le formulaire a été soumis"); // Vérifie si l'événement est capturé
+    const stripe = Stripe('VOTRE_CLE_PUBLIQUE_STRIPE');
+    const elements = stripe.elements();
+    const card = elements.create('card');
+    card.mount('#card-element');
 
+    paymentOptions.forEach(option => {
+        option.addEventListener('change', function () {
+            if (this.value === 'paypal') {
+                paypalButtonContainer.style.display = 'block';
+                cardElement.style.display = 'none';
+                submitOrderButton.style.display = 'none';
+            } else if (this.value === 'card') {
+                paypalButtonContainer.style.display = 'none';
+                cardElement.style.display = 'block';
+                submitOrderButton.style.display = 'block';
+            }
+        });
+    });
+
+    // PayPal Integration
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: 'MONTANT_TOTAL'
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                alert('Transaction réussie par ' + details.payer.name.given_name);
+                form.submit();  // Soumettre le formulaire après le paiement réussi
+            });
+        }
+    }).render('#paypal-button-container');
+
+    // Stripe Integration
+    submitOrderButton.addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: card,
+        });
+
+        if (error) {
+            console.error(error);
+        } else {
+            form.submit();  // Soumettre le formulaire après validation du paiement par carte
+        }
+    });
+
+    // Cloudinary Image Upload Script
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault(); // Empêche la soumission immédiate du formulaire
         const fileInput = document.getElementById('file');
         const file = fileInput.files[0];
-        console.log("Fichier sélectionné : ", file); // Vérifie si un fichier est sélectionné
 
         if (file) {
-            console.log("Upload de l'image vers Cloudinary...");
-            const cloudName = 'dwjkmwlyb';  // Remplacez par votre cloud_name
-            const uploadPreset = 'smarteez_orders'; // Remplacez par votre upload_preset
+            const cloudName = 'dwjkmwlyb';  // Cloud_name
+            const uploadPreset = 'smarteez_orders'; // Upload_preset
 
             const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
 
@@ -138,26 +216,21 @@
                 });
 
                 const data = await response.json();
-                console.log("Réponse Cloudinary : ", data); // Log la réponse de Cloudinary
                 if (data.secure_url) {
-                    console.log("Image uploadée avec succès : ", data.secure_url); // Confirme que l'image a été envoyée
                     const imageUrl = data.secure_url;
                     const hiddenInput = document.createElement('input');
                     hiddenInput.type = 'hidden';
                     hiddenInput.name = 'imageUrl';
                     hiddenInput.value = imageUrl;
                     form.appendChild(hiddenInput);
-
-                    console.log("Formulaire soumis avec l'image");
                     form.submit(); // Soumet le formulaire une fois l'image téléchargée
                 } else {
-                    console.error("Erreur lors de l'upload : ", data.error);  // Log l'erreur détaillée
+                    console.error("Erreur lors de l'upload : ", data.error);
                 }
             } catch (error) {
                 console.error('Erreur lors de l\'upload vers Cloudinary:', error);
             }
         } else {
-            console.log("Aucun fichier sélectionné, soumission du formulaire...");
             form.submit(); // Soumet le formulaire si aucun fichier n'est sélectionné
         }
     });
