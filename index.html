@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>19 Commande de Coque Personnalisée - Smarteez</title>
+    <title>20 Commande de Coque Personnalisée - Smarteez</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -151,7 +151,7 @@
                     console.log("Formulaire soumis avec l'image");
                     form.submit(); // Soumet le formulaire une fois l'image téléchargée
                 } else {
-                    console.error("Erreur lors de l'upload : URL sécurisée non trouvée");
+                    console.error("Erreur lors de l'upload : ", data.error);  // Log l'erreur détaillée
                 }
             } catch (error) {
                 console.error('Erreur lors de l\'upload vers Cloudinary:', error);
