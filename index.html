@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smarteez - Coque personnalisée</title>
+    <title>test Smarteez - Coque personnalisée</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -149,7 +149,7 @@
     const cardElement = document.getElementById('card-element');
     const submitOrderButton = document.getElementById('submitOrder');
     
-    const stripe = Stripe('pk_live_51Q0pzz03Hgw1RFXSzt25jEyuePM3OKHJXvpIcmZhA0J0ndyLraMJxxYuGVBI4SV3VnAnLtOEoHV5E4i8xxZAKwKC00dGkEtZ1P');
+    const stripe = Stripe('pk_test_51Q0pzz03Hgw1RFXSjdQu2gPw4V0r7cwdS0vRqUIjDOPE5LFb6WJ3r195HaZXxJej9aPtDNBP8g1tCCISX0iNRdYV007vrLVT8I');
     const elements = stripe.elements();
     const card = elements.create('card');
     card.mount('#card-element');
