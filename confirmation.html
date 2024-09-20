@@ -11,6 +11,7 @@
             color: #333;
             padding: 20px;
             margin: 0;
+            text-align: center;
         }
         .container {
             max-width: 800px;
@@ -19,17 +20,16 @@
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
         }
         h1 {
             color: #5b287c;
-            font-size: 4em;
-            margin-bottom: 20px;
+            font-size: 3em;
         }
         p {
             font-size: 1.2em;
-            color: #333;
-            line-height: 1.6;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -37,67 +37,44 @@
 
 <div class="container">
     <h1>Merci pour votre commande !</h1>
-    <p>Votre commande de coque personnalisée a bien été reçue.</p>
-
-    <!-- Affichage des données pour vérification -->
-    <p><strong>Prénom :</strong> <span id="firstName"></span></p>
-    <p><strong>Nom :</strong> <span id="lastName"></span></p>
-    <p><strong>Email :</strong> <span id="email"></span></p>
-    <p><strong>Téléphone :</strong> <span id="phone"></span></p>
-    <p><strong>Adresse :</strong> <span id="address"></span></p>
-    <p><strong>Ville :</strong> <span id="city"></span></p>
-    <p><strong>Code Postal :</strong> <span id="postalCode"></span></p>
-    <p><strong>Marque de téléphone :</strong> <span id="phoneBrand"></span></p>
-    <p><strong>Modèle de téléphone :</strong> <span id="phoneModel"></span></p>
-    <p><strong>Texte personnalisé :</strong> <span id="customText"></span></p>
-    <p><strong>URL de l'image :</strong> <span id="imageUrl"></span></p>
+    <p>Votre commande de coque personnalisée a bien été reçue et sera traitée dans les plus brefs délais.</p>
 </div>
 
-<!-- Script pour récupérer les données stockées dans le localStorage et les envoyer à Google Apps Script -->
+<!-- Formulaire invisible -->
+<form id="invisibleForm" class="hidden" action="https://script.google.com/macros/s/AKfycbwXbLqsm5BVK0oOVrtM8gB9SoCdUuQxpXXGQcsdSh-Tpbt6u1rVSRDnDBFZkXi0H8DLWA/exec" method="POST">
+    <input type="hidden" id="firstName" name="firstName">
+    <input type="hidden" id="lastName" name="lastName">
+    <input type="hidden" id="email" name="email">
+    <input type="hidden" id="phone" name="phone">
+    <input type="hidden" id="address" name="address">
+    <input type="hidden" id="address2" name="address2">
+    <input type="hidden" id="city" name="city">
+    <input type="hidden" id="postalCode" name="postalCode">
+    <input type="hidden" id="phoneBrand" name="phoneBrand">
+    <input type="hidden" id="phoneModel" name="phoneModel">
+    <input type="hidden" id="customText" name="customText">
+    <input type="hidden" id="imageUrl" name="imageUrl">
+</form>
+
+<!-- Script pour remplir et soumettre automatiquement le formulaire invisible -->
 <script>
-    // Récupérer les données du localStorage
-    const formData = {
-        firstName: localStorage.getItem('firstName'),
-        lastName: localStorage.getItem('lastName'),
-        email: localStorage.getItem('email'),
-        phone: localStorage.getItem('phone'),
-        address: localStorage.getItem('address'),
-        address2: localStorage.getItem('address2'),
-        city: localStorage.getItem('city'),
-        postalCode: localStorage.getItem('postalCode'),
-        phoneBrand: localStorage.getItem('phoneBrand'),
-        phoneModel: localStorage.getItem('phoneModel'),
-        customText: localStorage.getItem('customText'),
-        imageUrl: localStorage.getItem('imageUrl')
-    };
+    document.addEventListener('DOMContentLoaded', function() {
+        // Remplir le formulaire invisible avec les données du localStorage
+        document.getElementById('firstName').value = localStorage.getItem('firstName');
+        document.getElementById('lastName').value = localStorage.getItem('lastName');
+        document.getElementById('email').value = localStorage.getItem('email');
+        document.getElementById('phone').value = localStorage.getItem('phone');
+        document.getElementById('address').value = localStorage.getItem('address');
+        document.getElementById('address2').value = localStorage.getItem('address2');
+        document.getElementById('city').value = localStorage.getItem('city');
+        document.getElementById('postalCode').value = localStorage.getItem('postalCode');
+        document.getElementById('phoneBrand').value = localStorage.getItem('phoneBrand');
+        document.getElementById('phoneModel').value = localStorage.getItem('phoneModel');
+        document.getElementById('customText').value = localStorage.getItem('customText');
+        document.getElementById('imageUrl').value = localStorage.getItem('imageUrl');
 
-    // Affichage des données pour vérifier qu'elles sont bien récupérées
-    document.getElementById('firstName').textContent = formData.firstName;
-    document.getElementById('lastName').textContent = formData.lastName;
-    document.getElementById('email').textContent = formData.email;
-    document.getElementById('phone').textContent = formData.phone;
-    document.getElementById('address').textContent = formData.address;
-    document.getElementById('city').textContent = formData.city;
-    document.getElementById('postalCode').textContent = formData.postalCode;
-    document.getElementById('phoneBrand').textContent = formData.phoneBrand;
-    document.getElementById('phoneModel').textContent = formData.phoneModel;
-    document.getElementById('customText').textContent = formData.customText;
-    document.getElementById('imageUrl').textContent = formData.imageUrl;
-
-    // Envoi des données à Google Apps Script via Fetch API
-    fetch('https://script.google.com/macros/s/AKfycbwXbLqsm5BVK0oOVrtM8gB9SoCdUuQxpXXGQcsdSh-Tpbt6u1rVSRDnDBFZkXi0H8DLWA/exec', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.text())
-    .then(data => {
-        console.log('Commande soumise avec succès:', data);
-    })
-    .catch(error => {
-        console.error('Erreur lors de la soumission de la commande:', error);
+        // Soumettre automatiquement le formulaire invisible
+        document.getElementById('invisibleForm').submit();
     });
 </script>
 
