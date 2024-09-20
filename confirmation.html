@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>test Confirmation de commande - Smarteez</title>
+    <title>Confirmation de commande - Smarteez</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,20 +53,52 @@
     <p><strong>URL de l'image :</strong> <span id="imageUrl"></span></p>
 </div>
 
-<!-- Script pour récupérer les données stockées dans le localStorage -->
+<!-- Script pour récupérer les données stockées dans le localStorage et les envoyer à Google Apps Script -->
 <script>
-    // Récupérer les données du localStorage et les afficher
-    document.getElementById('firstName').textContent = localStorage.getItem('firstName');
-    document.getElementById('lastName').textContent = localStorage.getItem('lastName');
-    document.getElementById('email').textContent = localStorage.getItem('email');
-    document.getElementById('phone').textContent = localStorage.getItem('phone');
-    document.getElementById('address').textContent = localStorage.getItem('address');
-    document.getElementById('city').textContent = localStorage.getItem('city');
-    document.getElementById('postalCode').textContent = localStorage.getItem('postalCode');
-    document.getElementById('phoneBrand').textContent = localStorage.getItem('phoneBrand');
-    document.getElementById('phoneModel').textContent = localStorage.getItem('phoneModel');
-    document.getElementById('customText').textContent = localStorage.getItem('customText');
-    document.getElementById('imageUrl').textContent = localStorage.getItem('imageUrl');
+    // Récupérer les données du localStorage
+    const formData = {
+        firstName: localStorage.getItem('firstName'),
+        lastName: localStorage.getItem('lastName'),
+        email: localStorage.getItem('email'),
+        phone: localStorage.getItem('phone'),
+        address: localStorage.getItem('address'),
+        address2: localStorage.getItem('address2'),
+        city: localStorage.getItem('city'),
+        postalCode: localStorage.getItem('postalCode'),
+        phoneBrand: localStorage.getItem('phoneBrand'),
+        phoneModel: localStorage.getItem('phoneModel'),
+        customText: localStorage.getItem('customText'),
+        imageUrl: localStorage.getItem('imageUrl')
+    };
+
+    // Affichage des données pour vérifier qu'elles sont bien récupérées
+    document.getElementById('firstName').textContent = formData.firstName;
+    document.getElementById('lastName').textContent = formData.lastName;
+    document.getElementById('email').textContent = formData.email;
+    document.getElementById('phone').textContent = formData.phone;
+    document.getElementById('address').textContent = formData.address;
+    document.getElementById('city').textContent = formData.city;
+    document.getElementById('postalCode').textContent = formData.postalCode;
+    document.getElementById('phoneBrand').textContent = formData.phoneBrand;
+    document.getElementById('phoneModel').textContent = formData.phoneModel;
+    document.getElementById('customText').textContent = formData.customText;
+    document.getElementById('imageUrl').textContent = formData.imageUrl;
+
+    // Envoi des données à Google Apps Script via Fetch API
+    fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log('Commande soumise avec succès:', data);
+    })
+    .catch(error => {
+        console.error('Erreur lors de la soumission de la commande:', error);
+    });
 </script>
 
 </body>
