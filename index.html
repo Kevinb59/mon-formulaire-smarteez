@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smarteez - Coque personnalisée</title>
+    <title>test Smarteez - Coque personnalisée</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -174,8 +174,8 @@
                     if (data.secure_url) {
                         localStorage.setItem('imageUrl', data.secure_url);  // Stocker l'URL de l'image
                         
-                        // Rediriger vers Stripe Checkout
-                        window.location.href = "https://buy.stripe.com/test_3cs9Dx73w1W63YYcMM";
+                        // Rediriger vers Stripe Checkout (simulation ici)
+                        alert("Toutes les données ont été stockées, redirection vers Stripe simulée.");
                     } else {
                         console.error("Erreur lors de l'upload : ", data.error);
                     }
