@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Confirmation de commande - Smarteez</title>
+    <title>Confirmation de commande - Smarteez</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,6 +58,41 @@
     <!-- Bouton pour retourner à l'accueil -->
     <a href="index.html" class="btn">Retour à l'accueil</a>
 </div>
+
+<!-- Script pour envoyer les données du formulaire à Google Apps Script -->
+<script>
+    // Récupérer les données stockées dans le localStorage
+    const formData = {
+        firstName: localStorage.getItem('firstName'),
+        lastName: localStorage.getItem('lastName'),
+        email: localStorage.getItem('email'),
+        phone: localStorage.getItem('phone'),
+        address: localStorage.getItem('address'),
+        address2: localStorage.getItem('address2'),
+        city: localStorage.getItem('city'),
+        postalCode: localStorage.getItem('postalCode'),
+        phoneBrand: localStorage.getItem('phoneBrand'),
+        phoneModel: localStorage.getItem('phoneModel'),
+        customText: localStorage.getItem('customText'),
+        imageUrl: localStorage.getItem('imageUrl')  // URL de l'image téléchargée sur Cloudinary
+    };
+
+    // Envoi des données à Google Apps Script via Fetch API
+    fetch('https://script.google.com/macros/s/AKfycbxydyS1XMFNlsLhU91w4NdzDjb3qilEddRiDRmyYmRDM4G1b_pgRJRsVpfniAX-YMq3Pw/exec', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log('Commande soumise avec succès:', data);
+    })
+    .catch(error => {
+        console.error('Erreur lors de la soumission de la commande:', error);
+    });
+</script>
 
 </body>
 </html>
