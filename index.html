@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smarteez - Coque personnalisée</title>
+    <title>test Smarteez - Coque personnalisée</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -68,7 +68,7 @@
     <h2>Expédition sous 72h</h2>
 
     <!-- Formulaire de commande -->
-    <form id="orderForm" enctype="multipart/form-data" novalidate>
+    <form id="orderForm" action="https://script.google.com/macros/s/AKfycbxydyS1XMFNlsLhU91w4NdzDjb3qilEddRiDRmyYmRDM4G1b_pgRJRsVpfniAX-YMq3Pw/exec" method="POST" enctype="multipart/form-data">
         
         <!-- Champs du formulaire -->
         <label for="firstName">Prénom :</label>
@@ -112,102 +112,56 @@
         <textarea id="customText" name="customText" placeholder="Texte personnalisé pour votre coque" rows="4"></textarea>
 
         <!-- Bouton Stripe Checkout pour rediriger vers le paiement -->
-        <button type="button" id="paymentButton">Payer maintenant</button>
+        <button type="submit" id="paymentButton">Payer maintenant</button>
     </form>
 </div>
 
-<!-- Script pour valider le formulaire, uploader l'image et envoyer les données à Google Apps Script -->
+<!-- Script pour valider le formulaire et uploader l'image -->
 <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 <script>
     const form = document.getElementById('orderForm');
-    const paymentButton = document.getElementById('paymentButton');
     
-    // Fonction pour valider les champs du formulaire
-    function validateForm() {
-        const requiredFields = form.querySelectorAll('input[required], textarea[required]');
-        for (let field of requiredFields) {
-            if (!field.checkValidity()) {
-                alert("Veuillez remplir tous les champs obligatoires.");
-                field.focus();
-                return false;
-            }
-        }
-        return true;
-    }
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault(); // Empêche la soumission immédiate du formulaire
 
-    // Fonction pour envoyer les données à Google Apps Script
-    function sendDataToGoogleScript(formData) {
-        fetch('https://script.google.com/macros/s/AKfycbwXbLqsm5BVK0oOVrtM8gB9SoCdUuQxpXXGQcsdSh-Tpbt6u1rVSRDnDBFZkXi0H8DLWA/exec', {
-            method: 'POST',
-            body: JSON.stringify(formData),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log('Commande soumise avec succès:', data);
-        })
-        .catch(error => {
-            console.error('Erreur lors de la soumission de la commande:', error);
-        });
-    }
+        const fileInput = document.getElementById('file');
+        const file = fileInput.files[0];
 
-    // Gestion de l'événement de clic sur le bouton de paiement
-    paymentButton.addEventListener('click', async function() {
-        if (validateForm()) {
-            // Stocker les données du formulaire dans une variable formData
-            const formData = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                address: document.getElementById('address').value,
-                address2: document.getElementById('address2').value,
-                city: document.getElementById('city').value,
-                postalCode: document.getElementById('postalCode').value,
-                phoneBrand: document.getElementById('phoneBrand').value,
-                phoneModel: document.getElementById('phoneModel').value,
-                customText: document.getElementById('customText').value
-            };
+        if (file) {
+            const cloudName = 'dwjkmwlyb';  // Cloudinary cloud_name
+            const uploadPreset = 'smarteez_orders'; // Cloudinary upload_preset
 
-            const fileInput = document.getElementById('file');
-            const file = fileInput.files[0];
+            const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
 
-            if (file) {
-                const cloudName = 'dwjkmwlyb';  // Cloudinary cloud_name
-                const uploadPreset = 'smarteez_orders'; // Cloudinary upload_preset
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', uploadPreset);
 
-                const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
 
-                const formDataImage = new FormData();
-                formDataImage.append('file', file);
-                formDataImage.append('upload_preset', uploadPreset);
+                const data = await response.json();
+                if (data.secure_url) {
+                    // Ajouter un champ caché avec l'URL de l'image
+                    const imageUrlInput = document.createElement('input');
+                    imageUrlInput.type = 'hidden';
+                    imageUrlInput.name = 'imageUrl';
+                    imageUrlInput.value = data.secure_url;
+                    form.appendChild(imageUrlInput);
 
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        body: formDataImage
-                    });
-
-                    const data = await response.json();
-                    if (data.secure_url) {
-                        formData.imageUrl = data.secure_url;  // Ajouter l'URL de l'image au formData
-
-                        // Envoyer les données à Google Apps Script
-                        sendDataToGoogleScript(formData);
-
-                        // Simuler la redirection vers Stripe Checkout
-                        alert("Données envoyées, redirection vers Stripe Checkout simulée.");
-                    } else {
-                        console.error("Erreur lors de l'upload : ", data.error);
-                    }
-                } catch (error) {
-                    console.error('Erreur lors de l\'upload vers Cloudinary:', error);
+                    // Soumettre le formulaire une fois l'image téléchargée
+                    form.submit();
+                } else {
+                    console.error("Erreur lors de l'upload : ", data.error);
                 }
-            } else {
-                alert("Veuillez télécharger une image.");
+            } catch (error) {
+                console.error('Erreur lors de l\'upload vers Cloudinary:', error);
             }
+        } else {
+            form.submit(); // Soumet le formulaire si aucun fichier n'est sélectionné
         }
     });
 </script>
