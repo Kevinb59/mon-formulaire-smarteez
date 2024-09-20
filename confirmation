@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation de commande - Smarteez</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b7d397;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #5b287c;
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            color: #333;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #5b287c;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.1em;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #472362;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Merci pour votre commande !</h1>
+    <p>Votre commande de coque personnalisée a bien été reçue.</p>
+    <p>Vous recevrez un e-mail de confirmation avec les détails de votre commande sous peu.</p>
+    <p>Nous vous remercions pour votre confiance.</p>
+    
+    <!-- Bouton pour retourner à l'accueil -->
+    <a href="index.html" class="btn">Retour à l'accueil</a>
+</div>
+
+</body>
+</html>
