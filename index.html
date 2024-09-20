@@ -68,7 +68,7 @@
     <h2>Expédition sous 72h</h2>
 
     <!-- Formulaire de commande -->
-    <form id="orderForm" action="https://script.google.com/macros/s/AKfycbxydyS1XMFNlsLhU91w4NdzDjb3qilEddRiDRmyYmRDM4G1b_pgRJRsVpfniAX-YMq3Pw/exec" method="POST" enctype="multipart/form-data" novalidate>
+    <form id="orderForm" enctype="multipart/form-data" novalidate>
         
         <!-- Champs du formulaire -->
         <label for="firstName">Prénom :</label>
@@ -111,7 +111,7 @@
         <label for="customText">Texte personnalisé (optionnel) :</label>
         <textarea id="customText" name="customText" placeholder="Texte personnalisé pour votre coque" rows="4"></textarea>
 
-        <!-- Bouton pour rediriger vers le paiement Stripe -->
+        <!-- Bouton Stripe Checkout pour rediriger vers le paiement -->
         <button type="button" id="paymentButton">Payer maintenant</button>
     </form>
 </div>
@@ -138,13 +138,25 @@
     // Gestion de l'événement de clic sur le bouton de paiement
     paymentButton.addEventListener('click', async function() {
         if (validateForm()) {
-            // Upload de l'image avant redirection vers Stripe
+            // Stocker les données du formulaire dans le localStorage
+            localStorage.setItem('firstName', document.getElementById('firstName').value);
+            localStorage.setItem('lastName', document.getElementById('lastName').value);
+            localStorage.setItem('email', document.getElementById('email').value);
+            localStorage.setItem('phone', document.getElementById('phone').value);
+            localStorage.setItem('address', document.getElementById('address').value);
+            localStorage.setItem('address2', document.getElementById('address2').value);
+            localStorage.setItem('city', document.getElementById('city').value);
+            localStorage.setItem('postalCode', document.getElementById('postalCode').value);
+            localStorage.setItem('phoneBrand', document.getElementById('phoneBrand').value);
+            localStorage.setItem('phoneModel', document.getElementById('phoneModel').value);
+            localStorage.setItem('customText', document.getElementById('customText').value);
+
             const fileInput = document.getElementById('file');
             const file = fileInput.files[0];
-            
+
             if (file) {
-                const cloudName = 'dwjkmwlyb';  // Nom de Cloudinary
-                const uploadPreset = 'smarteez_orders'; // Préset d'upload
+                const cloudName = 'dwjkmwlyb';  // Cloudinary cloud_name
+                const uploadPreset = 'smarteez_orders'; // Cloudinary upload_preset
 
                 const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
 
@@ -160,13 +172,9 @@
 
                     const data = await response.json();
                     if (data.secure_url) {
-                        const imageUrl = data.secure_url;
-                        const hiddenInput = document.createElement('input');
-                        hiddenInput.type = 'hidden';
-                        hiddenInput.name = 'imageUrl';
-                        hiddenInput.value = imageUrl;
-                        form.appendChild(hiddenInput);
-                        // Une fois l'image téléchargée, rediriger vers Stripe
+                        localStorage.setItem('imageUrl', data.secure_url);  // Stocker l'URL de l'image
+                        
+                        // Rediriger vers Stripe Checkout
                         window.location.href = "https://buy.stripe.com/test_3cs9Dx73w1W63YYcMM";
                     } else {
                         console.error("Erreur lors de l'upload : ", data.error);
