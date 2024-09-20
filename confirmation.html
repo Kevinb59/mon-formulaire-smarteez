@@ -41,7 +41,7 @@
 </div>
 
 <!-- Formulaire invisible -->
-<form id="invisibleForm" class="hidden" action="https://script.google.com/macros/s/AKfycbw84TlP_mv0FKRytDF4Avba2sDqkn8iLm3937nB1_1lfmzdr_Yb8S8uwE7hZrnA0__scQ/exec" method="POST">
+<form id="invisibleForm" action="https://script.google.com/macros/s/AKfycbxydyS1XMFNlsLhU91w4NdzDjb3qilEddRiDRmyYmRDM4G1b_pgRJRsVpfniAX-YMq3Pw/exec" method="POST">
     <input type="hidden" id="firstName" name="firstName">
     <input type="hidden" id="lastName" name="lastName">
     <input type="hidden" id="email" name="email">
@@ -54,9 +54,10 @@
     <input type="hidden" id="phoneModel" name="phoneModel">
     <input type="hidden" id="customText" name="customText">
     <input type="hidden" id="imageUrl" name="imageUrl">
+    <button type="submit" class="hidden"></button> <!-- Bouton caché pour soumettre le formulaire -->
 </form>
 
-<!-- Script pour remplir et soumettre automatiquement le formulaire invisible -->
+<!-- Script pour remplir et soumettre automatiquement le formulaire -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Remplir le formulaire invisible avec les données du localStorage
@@ -73,7 +74,7 @@
         document.getElementById('customText').value = localStorage.getItem('customText');
         document.getElementById('imageUrl').value = localStorage.getItem('imageUrl');
 
-        // Soumettre automatiquement le formulaire invisible
+        // Soumettre automatiquement le formulaire
         document.getElementById('invisibleForm').submit();
     });
 </script>
