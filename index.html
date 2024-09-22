@@ -27,8 +27,7 @@
             display: block;
             width: 100%;
             border-radius: 10px 10px 0 0;
-            margin: 0;
-            padding: 0;
+            margin-bottom: 20px;
         }
         h1 {
             text-align: center;
@@ -39,6 +38,7 @@
             text-align: center;
             color: #5b287c;
             font-size: 2em;
+            margin: 10px 0;
         }
         label {
             font-weight: bold;
@@ -66,13 +66,14 @@
 <body>
 
 <div class="container">
-    <img src="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/main/smarteez.jpg" alt="Smarteez">
-    <h2>Commande de coque personnalisée</h2>
-    <h2>Expédition sous 72h</h2>
+    <!-- Formulaire de commande -->
+    <form id="orderForm" enctype="multipart/form-data" novalidate>
+        <!-- Premier cadre -->
+        <div class="frame">
+            <img src="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/main/smarteez.jpg" alt="Smarteez">
+            <h2>Commande de coque personnalisée</h2>
+            <h2>Expédition sous 72h</h2>
 
-    <!-- Premier cadre -->
-    <div class="frame">
-        <form id="orderForm" enctype="multipart/form-data" novalidate>
             <label for="firstName">Prénom :</label>
             <input type="text" id="firstName" name="firstName" placeholder="Votre prénom" required>
 
@@ -96,10 +97,10 @@
 
             <label for="postalCode">Code Postal :</label>
             <input type="text" id="postalCode" name="postalCode" placeholder="Code Postal" required>
-    </div>
+        </div>
 
-    <!-- Deuxième cadre -->
-    <div class="frame">
+        <!-- Deuxième cadre -->
+        <div class="frame">
             <label for="phoneBrand">Marque de téléphone :</label>
             <input type="text" id="phoneBrand" name="phoneBrand" placeholder="Marque de votre téléphone" required>
 
@@ -111,15 +112,16 @@
 
             <label for="customText">Texte personnalisé (optionnel) :</label>
             <textarea id="customText" name="customText" placeholder="Texte personnalisé pour votre coque" rows="4"></textarea>
-    </div>
+        </div>
 
-    <!-- Troisième cadre pour le bouton de paiement -->
-    <div class="frame">
-        <button type="button" id="paymentButton">Payer maintenant</button>
-        </form>
-    </div>
+        <!-- Troisième cadre pour le bouton de paiement -->
+        <div class="frame">
+            <button type="button" id="paymentButton">Payer maintenant</button>
+        </div>
+    </form>
 </div>
 
+<!-- Script pour stocker les données dans le localStorage et rediriger vers la page de paiement -->
 <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 <script>
     const form = document.getElementById('orderForm');
