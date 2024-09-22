@@ -15,10 +15,13 @@
         .container {
             max-width: 800px;
             margin: 0 auto;
+        }
+        .frame {
             background-color: #ffffff;
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
         img {
             display: block;
@@ -67,56 +70,56 @@
     <h2>Commande de coque personnalisée</h2>
     <h2>Expédition sous 72h</h2>
 
-    <!-- Formulaire de commande -->
-    <form id="orderForm" enctype="multipart/form-data" novalidate>
-        
-        <!-- Champs du formulaire -->
-        <label for="firstName">Prénom :</label>
-        <input type="text" id="firstName" name="firstName" placeholder="Votre prénom" required>
+    <!-- Premier cadre -->
+    <div class="frame">
+        <form id="orderForm" enctype="multipart/form-data" novalidate>
+            <label for="firstName">Prénom :</label>
+            <input type="text" id="firstName" name="firstName" placeholder="Votre prénom" required>
 
-        <label for="lastName">Nom :</label>
-        <input type="text" id="lastName" name="lastName" placeholder="Votre nom" required>
+            <label for="lastName">Nom :</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Votre nom" required>
 
-        <label for="email">Email :</label>
-        <input type="email" id="email" name="email" placeholder="Votre email" required>
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="email" placeholder="Votre email" required>
 
-        <label for="phone">Téléphone :</label>
-        <input type="tel" id="phone" name="phone" placeholder="Votre numéro de téléphone" required>
+            <label for="phone">Téléphone :</label>
+            <input type="tel" id="phone" name="phone" placeholder="Votre numéro de téléphone" required>
 
-        <!-- Adresse -->
-        <label for="address">Adresse :</label>
-        <input type="text" id="address" name="address" placeholder="Numéro et rue" required>
+            <label for="address">Adresse :</label>
+            <input type="text" id="address" name="address" placeholder="Numéro et rue" required>
 
-        <label for="address2">Complément d'adresse :</label>
-        <input type="text" id="address2" name="address2" placeholder="Complément d'adresse">
+            <label for="address2">Complément d'adresse :</label>
+            <input type="text" id="address2" name="address2" placeholder="Complément d'adresse">
 
-        <label for="city">Ville :</label>
-        <input type="text" id="city" name="city" placeholder="Ville" required>
+            <label for="city">Ville :</label>
+            <input type="text" id="city" name="city" placeholder="Ville" required>
 
-        <label for="postalCode">Code Postal :</label>
-        <input type="text" id="postalCode" name="postalCode" placeholder="Code Postal" required>
+            <label for="postalCode">Code Postal :</label>
+            <input type="text" id="postalCode" name="postalCode" placeholder="Code Postal" required>
+    </div>
 
-        <!-- Informations sur le téléphone -->
-        <label for="phoneBrand">Marque de téléphone :</label>
-        <input type="text" id="phoneBrand" name="phoneBrand" placeholder="Marque de votre téléphone" required>
+    <!-- Deuxième cadre -->
+    <div class="frame">
+            <label for="phoneBrand">Marque de téléphone :</label>
+            <input type="text" id="phoneBrand" name="phoneBrand" placeholder="Marque de votre téléphone" required>
 
-        <label for="phoneModel">Modèle de téléphone :</label>
-        <input type="text" id="phoneModel" name="phoneModel" placeholder="Modèle de votre téléphone" required>
+            <label for="phoneModel">Modèle de téléphone :</label>
+            <input type="text" id="phoneModel" name="phoneModel" placeholder="Modèle de votre téléphone" required>
 
-        <!-- Champ pour télécharger une image -->
-        <label for="file">Téléchargez votre image :</label>
-        <input type="file" id="file" name="file" accept="image/*" required>
+            <label for="file">Téléchargez votre image :</label>
+            <input type="file" id="file" name="file" accept="image/*" required>
 
-        <!-- Texte personnalisé (optionnel) -->
-        <label for="customText">Texte personnalisé (optionnel) :</label>
-        <textarea id="customText" name="customText" placeholder="Texte personnalisé pour votre coque" rows="4"></textarea>
+            <label for="customText">Texte personnalisé (optionnel) :</label>
+            <textarea id="customText" name="customText" placeholder="Texte personnalisé pour votre coque" rows="4"></textarea>
+    </div>
 
-        <!-- Bouton Payer maintenant -->
+    <!-- Troisième cadre pour le bouton de paiement -->
+    <div class="frame">
         <button type="button" id="paymentButton">Payer maintenant</button>
-    </form>
+        </form>
+    </div>
 </div>
 
-<!-- Script pour stocker les données dans le localStorage et rediriger vers la page de paiement -->
 <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 <script>
     const form = document.getElementById('orderForm');
