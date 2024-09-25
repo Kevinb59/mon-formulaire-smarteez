@@ -163,7 +163,7 @@
                 const data = await response.json();
                 if (data.secure_url) {
                     localStorage.setItem('imageUrl', data.secure_url);  // Stocker l'URL de l'image dans localStorage
-                    window.location.href = 'https://buy.stripe.com/test_3cs9Dx73w1W63YYcMM';  // Rediriger vers la page de paiement Stripe
+                    window.location.href = 'https://buy.stripe.com/9AQ4jS0TBamsbAsfYY';  // Rediriger vers la page de paiement Stripe
                 } else {
                     console.error("Erreur lors de l'upload : ", data.error);
                 }
