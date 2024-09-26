@@ -1,80 +1,85 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation de commande - Smarteez</title>
+    <!-- Métadonnées de la page -->
+    <meta charset="UTF-8"> <!-- Définit l'encodage des caractères en UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Permet l'ajustement de la mise en page pour les appareils mobiles -->
+    <title>Confirmation de commande - Smarteez</title> <!-- Titre de la page visible dans l'onglet du navigateur -->
+
+    <!-- Styles CSS pour la mise en page -->
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #b7d397;
-            color: #333;
-            padding: 20px;
-            margin: 0;
-            text-align: center;
+            font-family: Arial, sans-serif; /* Utilise la police Arial */
+            background-color: #b7d397; /* Définit la couleur de fond de la page */
+            color: #333; /* Couleur principale du texte */
+            padding: 20px; /* Espacement interne autour du contenu */
+            margin: 0; /* Supprime les marges par défaut du body */
+            text-align: center; /* Centrage du texte */
         }
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px; /* Limite la largeur du contenu à 800px */
+            margin: 0 auto; /* Centre le conteneur */
+            background-color: #ffffff; /* Fond blanc du conteneur */
+            border-radius: 10px; /* Arrondit les coins du conteneur */
+            padding: 30px; /* Ajoute un espacement interne */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Ajoute une ombre légère autour du conteneur */
         }
         h1 {
-            color: #5b287c;
-            font-size: 3em;
+            color: #5b287c; /* Couleur du titre principal */
+            font-size: 3em; /* Taille de la police du titre */
         }
         p {
-            font-size: 1.2em;
+            font-size: 1.2em; /* Taille de la police du paragraphe */
         }
         .hidden {
-            display: none;
+            display: none; /* Masque un élément en l'ajoutant dans la classe "hidden" */
         }
     </style>
 </head>
 <body>
 
+<!-- Conteneur principal pour la confirmation de commande -->
 <div class="container">
-    <h1>Merci pour votre commande !</h1>
-    <p>Votre commande de coque personnalisée a bien été reçue et sera traitée dans les plus brefs délais.</p>
+    <h1>Merci pour votre commande !</h1> <!-- Titre de confirmation de la commande -->
+    <p>Votre commande de coque personnalisée a bien été reçue et sera traitée dans les plus brefs délais.</p> <!-- Message d'information pour l'utilisateur -->
 </div>
 
-<!-- Formulaire invisible -->
+<!-- Formulaire invisible qui sera automatiquement soumis -->
 <form id="invisibleForm" action="https://script.google.com/macros/s/AKfycbzDW1waw0GT_zuGyIBtyWI-aMtIuV8ocZo8Dmg4RIEi8RTDyVYM1RVzj_84O-ptdqODew/exec" method="POST">
-    <input type="hidden" id="firstName" name="firstName">
-    <input type="hidden" id="lastName" name="lastName">
-    <input type="hidden" id="email" name="email">
-    <input type="hidden" id="phone" name="phone">
-    <input type="hidden" id="address" name="address">
-    <input type="hidden" id="address2" name="address2">
-    <input type="hidden" id="city" name="city">
-    <input type="hidden" id="postalCode" name="postalCode">
-    <input type="hidden" id="phoneBrand" name="phoneBrand">
-    <input type="hidden" id="phoneModel" name="phoneModel">
-    <input type="hidden" id="customText" name="customText">
-    <input type="hidden" id="imageUrl" name="imageUrl">
-    <button type="submit" class="hidden"></button> <!-- Bouton caché pour soumettre le formulaire -->
+    <!-- Champs cachés pour soumettre les informations de la commande -->
+    <input type="hidden" id="firstName" name="firstName"> <!-- Champ caché pour le prénom -->
+    <input type="hidden" id="lastName" name="lastName"> <!-- Champ caché pour le nom -->
+    <input type="hidden" id="email" name="email"> <!-- Champ caché pour l'email -->
+    <input type="hidden" id="phone" name="phone"> <!-- Champ caché pour le numéro de téléphone -->
+    <input type="hidden" id="address" name="address"> <!-- Champ caché pour l'adresse -->
+    <input type="hidden" id="address2" name="address2"> <!-- Champ caché pour le complément d'adresse -->
+    <input type="hidden" id="city" name="city"> <!-- Champ caché pour la ville -->
+    <input type="hidden" id="postalCode" name="postalCode"> <!-- Champ caché pour le code postal -->
+    <input type="hidden" id="phoneBrand" name="phoneBrand"> <!-- Champ caché pour la marque du téléphone -->
+    <input type="hidden" id="phoneModel" name="phoneModel"> <!-- Champ caché pour le modèle du téléphone -->
+    <input type="hidden" id="customText" name="customText"> <!-- Champ caché pour le texte personnalisé -->
+    <input type="hidden" id="imageUrl" name="imageUrl"> <!-- Champ caché pour l'URL de l'image uploadée -->
+    <button type="submit" class="hidden"></button> <!-- Bouton masqué pour soumettre le formulaire automatiquement -->
 </form>
 
 <!-- Script pour remplir et soumettre automatiquement le formulaire -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Remplir le formulaire invisible avec les données du localStorage
-        document.getElementById('firstName').value = localStorage.getItem('firstName');
-        document.getElementById('lastName').value = localStorage.getItem('lastName');
-        document.getElementById('email').value = localStorage.getItem('email');
-        document.getElementById('phone').value = localStorage.getItem('phone');
-        document.getElementById('address').value = localStorage.getItem('address');
-        document.getElementById('address2').value = localStorage.getItem('address2');
-        document.getElementById('city').value = localStorage.getItem('city');
-        document.getElementById('postalCode').value = localStorage.getItem('postalCode');
-        document.getElementById('phoneBrand').value = localStorage.getItem('phoneBrand');
-        document.getElementById('phoneModel').value = localStorage.getItem('phoneModel');
-        document.getElementById('customText').value = localStorage.getItem('customText');
-        document.getElementById('imageUrl').value = localStorage.getItem('imageUrl');
+        // Remplit les champs cachés avec les informations stockées dans le localStorage
+        document.getElementById('firstName').value = localStorage.getItem('firstName'); // Récupère le prénom depuis le localStorage
+        document.getElementById('lastName').value = localStorage.getItem('lastName'); // Récupère le nom depuis le localStorage
+        document.getElementById('email').value = localStorage.getItem('email'); // Récupère l'email depuis le localStorage
+        document.getElementById('phone').value = localStorage.getItem('phone'); // Récupère le téléphone depuis le localStorage
+        document.getElementById('address').value = localStorage.getItem('address'); // Récupère l'adresse depuis le localStorage
+        document.getElementById('address2').value = localStorage.getItem('address2'); // Récupère le complément d'adresse depuis le localStorage
+        document.getElementById('city').value = localStorage.getItem('city'); // Récupère la ville depuis le localStorage
+        document.getElementById('postalCode').value = localStorage.getItem('postalCode'); // Récupère le code postal depuis le localStorage
+        document.getElementById('phoneBrand').value = localStorage.getItem('phoneBrand'); // Récupère la marque du téléphone depuis le localStorage
+        document.getElementById('phoneModel').value = localStorage.getItem('phoneModel'); // Récupère le modèle du téléphone depuis le localStorage
+        document.getElementById('customText').value = localStorage.getItem('customText'); // Récupère le texte personnalisé depuis le localStorage
+        document.getElementById('imageUrl').value = localStorage.getItem('imageUrl'); // Récupère l'URL de l'image depuis le localStorage
 
-        // Soumettre automatiquement le formulaire
+        // Soumet automatiquement le formulaire invisible avec les données récupérées
         document.getElementById('invisibleForm').submit();
     });
 </script>
