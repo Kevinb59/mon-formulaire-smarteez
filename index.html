@@ -4,7 +4,7 @@
     <!-- Métadonnées de la page -->
     <meta charset="UTF-8"> <!-- Déclaration du jeu de caractères UTF-8 pour les accents et caractères spéciaux -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ajustement de la mise en page pour les appareils mobiles -->
-    <title>Smarteez - Coque personnalisée</title> <!-- Titre de la page visible dans l'onglet du navigateur -->
+    <title>test Smarteez - Coque personnalisée</title> <!-- Titre de la page visible dans l'onglet du navigateur -->
 
     <!-- Ajout de la favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/SMARTEEZ%20s.png">
@@ -185,7 +185,7 @@
                 const data = await response.json(); // Conversion de la réponse en JSON
                 if (data.secure_url) { // Vérification si l'upload a réussi
                     localStorage.setItem('imageUrl', data.secure_url);  // Stocke l'URL de l'image dans le localStorage
-                    window.location.href = 'https://buy.stripe.com/9AQ4jS0TBamsbAsfYY';  // Redirige vers la page de paiement Stripe
+                    window.location.href = 'https://buy.stripe.com/test_3cs9Dx73w1W63YYcMM';  // Redirige vers la page de paiement Stripe
                 } else {
                     console.error("Erreur lors de l'upload : ", data.error); // Affiche l'erreur en cas d'échec
                 }
