@@ -119,11 +119,15 @@
         <div class="frame">
             <!-- Marque du téléphone -->
             <label for="phoneBrand">Marque de téléphone :</label>
-            <input type="text" id="phoneBrand" name="phoneBrand" placeholder="Marque de votre téléphone" required>
-
+            <select id="phoneBrand" name="phoneBrand" required>
+              <option value="">Sélectionner une marque</option>
+            </select>
+            
             <!-- Modèle du téléphone -->
             <label for="phoneModel">Modèle de téléphone :</label>
-            <input type="text" id="phoneModel" name="phoneModel" placeholder="Modèle de votre téléphone" required>
+            <select id="phoneModel" name="phoneModel" required disabled>
+              <option value="">Sélectionner un modèle</option>
+            </select>
 
             <!-- Téléchargement de l'image personnalisée -->
             <label for="file">Téléchargez votre image :</label>
@@ -202,5 +206,49 @@
     });
 </script>
 
+<script>
+  // URL brute du fichier JSON sur GitHub
+  const jsonUrl = 'https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/main/phones.json';  // Remplacez "votre-utilisateur" et "votre-depot" par vos infos GitHub
+
+  // Charger le fichier JSON contenant les marques et modèles
+  fetch(jsonUrl)
+    .then(response => response.json())
+    .then(data => {
+      const phoneBrandSelect = document.getElementById('phoneBrand');
+      const phoneModelSelect = document.getElementById('phoneModel');
+
+      // Remplir la liste des marques
+      Object.keys(data.brands).forEach(brand => {
+        const option = document.createElement('option');
+        option.value = brand;
+        option.textContent = brand;
+        phoneBrandSelect.appendChild(option);
+      });
+
+      // Remplir la liste des modèles lorsque la marque est sélectionnée
+      phoneBrandSelect.addEventListener('change', function() {
+        // Réinitialiser les options du modèle
+        phoneModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
+        phoneModelSelect.disabled = true;
+
+        const selectedBrand = this.value;
+        if (selectedBrand && data.brands[selectedBrand]) {
+          // Activer la sélection du modèle
+          phoneModelSelect.disabled = false;
+          data.brands[selectedBrand].forEach(model => {
+            const option = document.createElement('option');
+            option.value = model;
+            option.textContent = model;
+            phoneModelSelect.appendChild(option);
+          });
+        }
+      });
+    })
+    .catch(error => {
+      console.error('Erreur lors du chargement du fichier JSON', error);
+    });
+</script>
+
+    
 </body>
 </html>
