@@ -109,7 +109,7 @@
 
                 if (docSnap.exists()) {
                     phonesData = docSnap.data();
-                    updateBrandSelect();
+                    updateAllBrandSelects();  // Mise à jour de toutes les listes de marques
                     displayPhoneList();
                 } else {
                     console.log('Aucune donnée trouvée');
@@ -120,18 +120,23 @@
         }
 
         // Mettre à jour la sélection de marque pour toutes les listes déroulantes
-        function updateBrandSelect() {
+        function updateAllBrandSelects() {
             const brandSelect = document.getElementById('brandSelect');
             const deleteBrandSelect = document.getElementById('deleteBrandSelect');
+            
             brandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
             deleteBrandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
             
             Object.keys(phonesData.brands).forEach(brand => {
-                const option = document.createElement('option');
-                option.value = brand;
-                option.textContent = brand;
-                brandSelect.appendChild(option);
-                deleteBrandSelect.appendChild(option);
+                const option1 = document.createElement('option');
+                option1.value = brand;
+                option1.textContent = brand;
+                brandSelect.appendChild(option1);  // Pour ajouter un modèle
+
+                const option2 = document.createElement('option');
+                option2.value = brand;
+                option2.textContent = brand;
+                deleteBrandSelect.appendChild(option2);  // Pour supprimer une marque ou un modèle
             });
         }
 
@@ -187,7 +192,7 @@
             const newBrand = document.getElementById('newBrandInput').value;
             if (newBrand && !phonesData.brands[newBrand]) {
                 phonesData.brands[newBrand] = [];
-                updateBrandSelect();
+                updateAllBrandSelects();
                 displayPhoneList();
                 alert('Marque ajoutée avec succès.');
             } else {
@@ -221,7 +226,7 @@
             if (selectedBrand && !selectedModel) {
                 if (confirm(`Voulez-vous vraiment supprimer la marque "${selectedBrand}" et tous ses modèles ?`)) {
                     delete phonesData.brands[selectedBrand];
-                    updateBrandSelect();
+                    updateAllBrandSelects();
                     displayPhoneList();
                     alert('Marque supprimée avec succès.');
                 }
