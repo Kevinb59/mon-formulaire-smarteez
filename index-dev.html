@@ -1,71 +1,68 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <!-- Métadonnées de la page -->
-    <meta charset="UTF-8"> <!-- Déclaration du jeu de caractères UTF-8 pour les accents et caractères spéciaux -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ajustement de la mise en page pour les appareils mobiles -->
-    <title>Smart-Z - Coque personnalisée</title> <!-- Titre de la page visible dans l'onglet du navigateur -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Z - Coque personnalisée</title>
 
-    <!-- Ajout de la favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/SMARTEEZ%20s.png">
     
-    <!-- Styles CSS pour la mise en page -->
     <style>
         body {
-            font-family: Arial, sans-serif; /* Police d'écriture */
-            background-color: #b7d397; /* Couleur de fond de la page */
-            color: #333; /* Couleur du texte */
-            padding: 20px; /* Espacement interne de la page */
-            margin: 0; /* Suppression des marges par défaut */
+            font-family: Arial, sans-serif;
+            background-color: #b7d397;
+            color: #333;
+            padding: 20px;
+            margin: 0;
         }
         .container {
-            max-width: 800px; /* Limite la largeur du contenu à 800px */
-            margin: 0 auto; /* Centre le contenu horizontalement */
+            max-width: 800px;
+            margin: 0 auto;
         }
         .frame {
-            background-color: #ffffff; /* Couleur de fond du cadre */
-            border-radius: 10px; /* Bords arrondis */
-            padding: 30px; /* Espacement interne du cadre */
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Ombre autour du cadre */
-            margin-bottom: 20px; /* Espace sous chaque cadre */
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
         img {
-            display: block; /* Rend l'image un élément de bloc */
-            width: 100%; /* L'image occupe toute la largeur du cadre */
-            border-radius: 10px 10px 0 0; /* Arrondi uniquement les coins du haut */
-            margin-bottom: 20px; /* Espace sous l'image */
+            display: block;
+            width: 100%;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 20px;
         }
         h1 {
-            text-align: center; /* Centrage du texte */
-            color: #5b287c; /* Couleur du titre */
-            font-size: 4em; /* Taille du texte */
+            text-align: center;
+            color: #5b287c;
+            font-size: 4em;
         }
         h2 {
-            text-align: center; /* Centrage des sous-titres */
-            color: #5b287c; /* Couleur du sous-titre */
-            font-size: 2em; /* Taille du texte */
-            margin: 10px 0; /* Espacement autour du sous-titre */
+            text-align: center;
+            color: #5b287c;
+            font-size: 2em;
+            margin: 10px 0;
         }
         label {
-            font-weight: bold; /* Met le texte en gras */
-            color: #333; /* Couleur du texte du label */
+            font-weight: bold;
+            color: #333;
         }
         input, select, textarea, button {
-            width: 100%; /* Les champs de saisie occupent toute la largeur */
-            padding: 10px; /* Espacement interne */
-            margin: 10px 0; /* Espace entre les éléments */
-            border-radius: 5px; /* Arrondit les bords */
-            border: 1px solid #ccc; /* Bordure grise légère */
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
         button {
-            background-color: #5b287c; /* Couleur de fond du bouton */
-            color: white; /* Couleur du texte du bouton */
-            border: none; /* Retire les bordures */
-            cursor: pointer; /* Change le curseur au survol */
-            font-size: 1.1em; /* Taille du texte dans le bouton */
+            background-color: #5b287c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
         }
         button:hover {
-            background-color: #472362; /* Change la couleur au survol */
+            background-color: #472362;
         }
         select {
             width: 100%;
@@ -76,194 +73,88 @@
             box-sizing: border-box;
         }
     </style>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-        
-        // Configuration Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAOj_aM10Fcmy7EoVRdgAqXrMBQ1gt081o",
-            authDomain: "smart-z-phone-management.firebaseapp.com",
-            projectId: "smart-z-phone-management",
-            storageBucket: "smart-z-phone-management.appspot.com",
-            messagingSenderId: "949078314626",
-            appId: "1:949078314626:web:a2a5cb9d87774dc70251b",
-            measurementId: "G-KV5WM5J2EX"
-        };
-
-        // Initialiser Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        window.db = db; // Rendre `db` disponible globalement
-
-        // Fonction pour charger les marques et modèles depuis Firestore
-        async function loadPhoneData() {
-            try {
-                const docRef = doc(db, 'phones', 'phonesData');
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    populatePhoneBrandSelect(data.brands);
-                } else {
-                    console.error('Aucune donnée trouvée');
-                }
-            } catch (error) {
-                console.error('Erreur lors de la récupération des données Firestore:', error);
-            }
-        }
-
-        // Remplir le select de la marque
-        function populatePhoneBrandSelect(brands) {
-            const phoneBrandSelect = document.getElementById('phoneBrand');
-            const phoneModelSelect = document.getElementById('phoneModel');
-            
-            phoneBrandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
-            
-            Object.keys(brands).forEach(brand => {
-                const option = document.createElement('option');
-                option.value = brand;
-                option.textContent = brand;
-                phoneBrandSelect.appendChild(option);
-            });
-
-            // Gérer le changement de marque
-            phoneBrandSelect.addEventListener('change', function() {
-                const selectedBrand = this.value;
-                phoneModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
-                phoneModelSelect.disabled = true;
-
-                if (selectedBrand && brands[selectedBrand]) {
-                    phoneModelSelect.disabled = false;
-                    brands[selectedBrand].forEach(model => {
-                        const option = document.createElement('option');
-                        option.value = model;
-                        option.textContent = model;
-                        phoneModelSelect.appendChild(option);
-                    });
-                }
-            });
-        }
-
-        // Charger les données lors du chargement de la page
-        window.addEventListener('DOMContentLoaded', () => {
-            loadPhoneData();
-        });
-    </script>
     
 </head>
 <body>
 
-<!-- Conteneur principal pour le formulaire -->
 <div class="container">
-    <!-- Formulaire de commande -->
     <form id="orderForm" enctype="multipart/form-data" novalidate>
-        <!-- Premier cadre pour les informations personnelles -->
         <div class="frame">
-            <!-- Image bannière -->
             <img src="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/main/smarteez.jpg" alt="Smarteez">
-            <h2>Commande de coque personnalisée</h2> <!-- Titre du formulaire -->
-            <h2>Expédition sous 72h</h2> <!-- Information sur l'expédition -->
+            <h2>Commande de coque personnalisée</h2>
+            <h2>Expédition sous 72h</h2>
 
-            <!-- Saisie du prénom -->
             <label for="firstName">Prénom :</label>
             <input type="text" id="firstName" name="firstName" placeholder="Votre prénom" required>
 
-            <!-- Saisie du nom -->
             <label for="lastName">Nom :</label>
             <input type="text" id="lastName" name="lastName" placeholder="Votre nom" required>
 
-            <!-- Saisie de l'email -->
             <label for="email">Email :</label>
             <input type="email" id="email" name="email" placeholder="Votre email" required>
 
-            <!-- Saisie du téléphone -->
             <label for="phone">Téléphone :</label>
             <input type="tel" id="phone" name="phone" placeholder="Votre numéro de téléphone" required>
 
-            <!-- Saisie de l'adresse -->
             <label for="address">Adresse :</label>
             <input type="text" id="address" name="address" placeholder="Numéro et rue" required>
 
-            <!-- Saisie du complément d'adresse (optionnel) -->
             <label for="address2">Complément d'adresse :</label>
             <input type="text" id="address2" name="address2" placeholder="Complément d'adresse">
 
-            <!-- Saisie de la ville -->
             <label for="city">Ville :</label>
             <input type="text" id="city" name="city" placeholder="Ville" required>
 
-            <!-- Saisie du code postal -->
             <label for="postalCode">Code Postal :</label>
             <input type="text" id="postalCode" name="postalCode" placeholder="Code Postal" required>
         </div>
 
-        <!-- Deuxième cadre pour les détails de la coque personnalisée -->
         <div class="frame">
-            <!-- Marque du téléphone -->
             <label for="phoneBrand">Marque de téléphone :</label>
             <select id="phoneBrand" name="phoneBrand" required>
               <option value="">Sélectionner une marque</option>
             </select>
-            
-            <!-- Modèle du téléphone -->
+
             <label for="phoneModel">Modèle de téléphone :</label>
             <select id="phoneModel" name="phoneModel" required disabled>
               <option value="">Sélectionner un modèle</option>
             </select>
 
-            <!-- Téléchargement de l'image personnalisée -->
             <label for="file">Téléchargez votre image :</label>
             <input type="file" id="file" name="file" accept="image/*" required>
 
-            <!-- Saisie d'un texte personnalisé (optionnel) -->
             <label for="customText">Texte personnalisé (optionnel) :</label>
             <textarea id="customText" name="customText" placeholder="Texte personnalisé pour votre coque" rows="4"></textarea>
+
+            <label for="quantity">Quantité :</label>
+            <input type="number" id="quantity" name="quantity" min="1" value="1">
         </div>
 
-        <!-- Troisième cadre pour le bouton de paiement -->
         <div class="frame">
-            <button type="button" id="paymentButton">Payer maintenant</button> <!-- Bouton de paiement -->
+            <button type="button" id="paymentButton">Payer maintenant</button>
         </div>
     </form>
 </div>
 
-<!-- Section pour contacter Smart-Z -->
 <div class="frame" style="margin-top: 20px; width: 100%; max-width: 600px; margin: 20px auto; text-align: center; padding: 20px; border: 2px solid #5b287c; border-radius: 10px;">
     <p>Si vous avez des questions ou des demandes spécifiques, n'hésitez pas à nous contacter :</p>
     <p><a href="mailto:contact@smart-z.fr" style="color: #5b287c; text-decoration: none; font-weight: bold;">contact@smart-z.fr</a></p>
 </div>
 
-<!-- Script pour gérer le stockage dans le localStorage et le paiement -->
-<script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 <script>
     const paymentButton = document.getElementById('paymentButton');
-    
-    paymentButton.addEventListener('click', async function() {
-        // Stockage des informations du formulaire dans le localStorage
-        localStorage.setItem('firstName', document.getElementById('firstName').value);
-        localStorage.setItem('lastName', document.getElementById('lastName').value);
-        localStorage.setItem('email', document.getElementById('email').value);
-        localStorage.setItem('phone', document.getElementById('phone').value);
-        localStorage.setItem('address', document.getElementById('address').value);
-        localStorage.setItem('address2', document.getElementById('address2').value);
-        localStorage.setItem('city', document.getElementById('city').value);
-        localStorage.setItem('postalCode', document.getElementById('postalCode').value);
-        localStorage.setItem('phoneBrand', document.getElementById('phoneBrand').value);
-        localStorage.setItem('phoneModel', document.getElementById('phoneModel').value);
-        localStorage.setItem('customText', document.getElementById('customText').value);
 
+    paymentButton.addEventListener('click', async function() {
+        const formData = new FormData();
         const fileInput = document.getElementById('file');
         const file = fileInput.files[0];
 
         if (file) {
             const cloudName = 'dwjkmwlyb';
             const uploadPreset = 'smarteez_orders';
-
             const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
 
-            const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', uploadPreset);
 
@@ -275,8 +166,7 @@
 
                 const data = await response.json();
                 if (data.secure_url) {
-                    localStorage.setItem('imageUrl', data.secure_url);
-                    window.location.href = 'https://buy.stripe.com/9AQ4jS0TBamsbAsfYY';
+                    createCheckoutSession(data.secure_url);
                 } else {
                     console.error("Erreur lors de l'upload : ", data.error);
                 }
@@ -285,6 +175,39 @@
             }
         }
     });
+
+    async function createCheckoutSession(imageUrl) {
+        const response = await fetch('/api/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                address2: document.getElementById('address2').value,
+                city: document.getElementById('city').value,
+                postalCode: document.getElementById('postalCode').value,
+                phoneBrand: document.getElementById('phoneBrand').value,
+                phoneModel: document.getElementById('phoneModel').value,
+                customText: document.getElementById('customText').value,
+                imageUrl: imageUrl,
+                quantity: document.getElementById('quantity').value
+            })
+        });
+
+        const session = await response.json();
+        if (session.id) {
+            const stripe = Stripe('pk_live_51Q0pzz03Hgw1RFXSzt25jEyuePM3OKHJXvpIcmZhA0J0ndyLraMJxxYuGVBI4SV3VnAnLtOEoHV5E4i8xxZAKwKC00dGkEtZ1P');
+            stripe.redirectToCheckout({ sessionId: session.id });
+        } else {
+            console.error("Erreur lors de la création de la session de paiement : ", session.error);
+        }
+    }
 </script>
+
 </body>
 </html>
