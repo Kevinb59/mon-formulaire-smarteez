@@ -78,7 +78,7 @@
     </style>
 
     <script type="module">
-      // Importation de Firebase
+      // Importer Firebase
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
       import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
       
@@ -92,12 +92,12 @@
         appId: "1:949078314626:web:a2a5cb9d87774dc70251b",
         measurementId: "G-KV5WM5J2EX"
       };
-    
+
       // Initialiser Firebase
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
-      
-      // Rendre `db` disponible globalement pour d'autres scripts
+
+      // Rendre `db` disponible globalement
       window.db = db;
     </script>
     
@@ -114,7 +114,7 @@
             <img src="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/main/smarteez.jpg" alt="Smarteez">
             <h2>Commande de coque personnalisée</h2> <!-- Titre du formulaire -->
             <h2>Expédition sous 72h</h2> <!-- Information sur l'expédition -->
-            <h2>---3---</h2>
+            <h2>---4---</h2>
             
             <!-- Saisie du prénom -->
             <label for="firstName">Prénom :</label>
@@ -245,6 +245,7 @@
 <script type="module">
   async function loadPhoneData() {
     try {
+      // Utilisation correcte de `doc` et `getDoc` après avoir importé Firebase
       const docRef = doc(window.db, 'phones', 'phonesData');
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
