@@ -236,49 +236,6 @@
     });
 </script>
 
-<script>
-  // URL brute du fichier JSON sur GitHub
-  const jsonUrl = 'https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/main/phones.json';  // Remplacez "votre-utilisateur" et "votre-depot" par vos infos GitHub
-
-  // Charger le fichier JSON contenant les marques et modèles
-  fetch(jsonUrl)
-    .then(response => response.json())
-    .then(data => {
-      const phoneBrandSelect = document.getElementById('phoneBrand');
-      const phoneModelSelect = document.getElementById('phoneModel');
-
-      // Remplir la liste des marques
-      Object.keys(data.brands).forEach(brand => {
-        const option = document.createElement('option');
-        option.value = brand;
-        option.textContent = brand;
-        phoneBrandSelect.appendChild(option);
-      });
-
-      // Remplir la liste des modèles lorsque la marque est sélectionnée
-      phoneBrandSelect.addEventListener('change', function() {
-        // Réinitialiser les options du modèle
-        phoneModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
-        phoneModelSelect.disabled = true;
-
-        const selectedBrand = this.value;
-        if (selectedBrand && data.brands[selectedBrand]) {
-          // Activer la sélection du modèle
-          phoneModelSelect.disabled = false;
-          data.brands[selectedBrand].forEach(model => {
-            const option = document.createElement('option');
-            option.value = model;
-            option.textContent = model;
-            phoneModelSelect.appendChild(option);
-          });
-        }
-      });
-    })
-    .catch(error => {
-      console.error('Erreur lors du chargement du fichier JSON', error);
-    });
-</script>
-
 <script type="module">
   // Charger les données de Firestore
   async function loadPhoneData() {
