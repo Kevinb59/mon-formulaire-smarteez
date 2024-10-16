@@ -55,20 +55,43 @@
         <button id="deleteBtn">Supprimer une marque ou un modèle</button>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAOj_aM10Fcmy7EoVRdgAqXrMBQ1gt081o",
+            authDomain: "smart-z-phone-management.firebaseapp.com",
+            projectId: "smart-z-phone-management",
+            storageBucket: "smart-z-phone-management.appspot.com",
+            messagingSenderId: "949078314626",
+            appId: "1:949078314626:web:a2a5cb9d87774dc70251b",
+            measurementId: "G-KV5WM5J2EX"
+        };
+
+        // Initialiser Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         let phonesData = { brands: {} }; // Par défaut vide
 
         // Fonction pour charger les données existantes de Firestore
         async function loadPhonesData() {
-            const docRef = doc(db, 'phones', 'phonesData');
-            const docSnap = await getDoc(docRef);
+            try {
+                const docRef = doc(db, 'phones', 'phonesData');
+                const docSnap = await getDoc(docRef);
 
-            if (docSnap.exists()) {
-                phonesData = docSnap.data();
-                updateBrandSelect();
-                displayPhoneList();
-            } else {
-                console.log('Aucune donnée trouvée');
+                if (docSnap.exists()) {
+                    phonesData = docSnap.data();
+                    console.log("Données récupérées avec succès :", phonesData);
+                    updateBrandSelect();
+                    displayPhoneList();
+                } else {
+                    console.log('Aucune donnée trouvée');
+                }
+            } catch (error) {
+                console.error("Erreur lors du chargement des données :", error);
             }
         }
 
@@ -76,23 +99,31 @@
         function updateBrandSelect() {
             const brandSelect = document.getElementById('brandSelect');
             brandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
-            Object.keys(phonesData.brands).forEach(brand => {
-                const option = document.createElement('option');
-                option.value = brand;
-                option.textContent = brand;
-                brandSelect.appendChild(option);
-            });
+            
+            if (phonesData && phonesData.brands) {
+                Object.keys(phonesData.brands).forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand;
+                    option.textContent = brand;
+                    brandSelect.appendChild(option);
+                });
+            } else {
+                console.error("Aucune marque trouvée dans les données.");
+            }
         }
 
         // Afficher la liste des marques et modèles
         function displayPhoneList() {
             const phoneList = document.getElementById('phoneList');
             phoneList.innerHTML = '';
-            Object.entries(phonesData.brands).forEach(([brand, models]) => {
-                const li = document.createElement('li');
-                li.textContent = `${brand}: ${models.join(', ')}`;
-                phoneList.appendChild(li);
-            });
+            
+            if (phonesData && phonesData.brands) {
+                Object.entries(phonesData.brands).forEach(([brand, models]) => {
+                    const li = document.createElement('li');
+                    li.textContent = `${brand}: ${models.join(', ')}`;
+                    phoneList.appendChild(li);
+                });
+            }
         }
 
         // Ajouter une marque
@@ -154,39 +185,19 @@
             savePhoneData(phonesData);
         });
 
+        // Fonction pour sauvegarder les données dans Firestore
+        async function savePhoneData(data) {
+            try {
+                await setDoc(doc(db, 'phones', 'phonesData'), data);
+                alert('Données sauvegardées avec succès.');
+            } catch (error) {
+                console.error('Erreur lors de la sauvegarde des données :', error);
+                alert('Erreur lors de la sauvegarde des données.');
+            }
+        }
+
         // Charger les données au démarrage
         loadPhonesData();
-    </script>
-
-    <!-- Ajouter Firebase à la page -->
-    <script type="module">
-       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-       import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-    
-       const firebaseConfig = {
-         apiKey: "AIzaSyAOj_aM10Fcmy7EoVRdgAqXrMBQ1gt081o",
-         authDomain: "smart-z-phone-management.firebaseapp.com",
-         projectId: "smart-z-phone-management",
-         storageBucket: "smart-z-phone-management.appspot.com",
-         messagingSenderId: "949078314626",
-         appId: "1:949078314626:web:a2a5cb9d87774dc70251b",
-         measurementId: "G-KV5WM5J2EX"
-       };
-    
-       // Initialiser Firebase
-       const app = initializeApp(firebaseConfig);
-       const db = getFirestore(app);
-       
-       // Fonction pour sauvegarder les données
-       async function savePhoneData(data) {
-         try {
-           await setDoc(doc(db, 'phones', 'phonesData'), data);
-           alert('Données sauvegardées avec succès');
-         } catch (error) {
-           console.error('Erreur lors de la sauvegarde des données :', error);
-           alert('Erreur lors de la sauvegarde des données.');
-         }
-       }
     </script>
 
 </body>
