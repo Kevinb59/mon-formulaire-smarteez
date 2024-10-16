@@ -149,7 +149,26 @@
                     deleteModelSelect.appendChild(option);
                 });
             }
+
+            updateDeleteButtonText();
         });
+
+        // Mettre à jour le texte du bouton de suppression
+        document.getElementById('deleteModelSelect').addEventListener('change', updateDeleteButtonText);
+
+        function updateDeleteButtonText() {
+            const selectedBrand = document.getElementById('deleteBrandSelect').value;
+            const selectedModel = document.getElementById('deleteModelSelect').value;
+            const deleteBtn = document.getElementById('deleteBtn');
+
+            if (selectedBrand && !selectedModel) {
+                deleteBtn.textContent = "Supprimer la marque";
+            } else if (selectedBrand && selectedModel) {
+                deleteBtn.textContent = "Supprimer le modèle";
+            } else {
+                deleteBtn.textContent = "Supprimer la marque / modèle";
+            }
+        }
 
         // Afficher la liste des marques et modèles
         function displayPhoneList() {
