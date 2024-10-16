@@ -76,6 +76,27 @@
             box-sizing: border-box;
         }
     </style>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+      import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+    
+      // Configuration Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyAOj_aM10Fcmy7EoVRdgAqXrMBQ1gt081o",
+        authDomain: "smart-z-phone-management.firebaseapp.com",
+        projectId: "smart-z-phone-management",
+        storageBucket: "smart-z-phone-management.appspot.com",
+        messagingSenderId: "949078314626",
+        appId: "1:949078314626:web:a2a5cb9d87774dc70251b",
+        measurementId: "G-KV5WM5J2EX"
+      };
+    
+      // Initialiser Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+    </script>
+    
 </head>
 <body>
 
@@ -130,12 +151,13 @@
             <select id="phoneBrand" name="phoneBrand" required>
               <option value="">Sélectionner une marque</option>
             </select>
-            
+
             <!-- Modèle du téléphone -->
             <label for="phoneModel">Modèle de téléphone :</label>
             <select id="phoneModel" name="phoneModel" required disabled>
               <option value="">Sélectionner un modèle</option>
             </select>
+
 
             <!-- Téléchargement de l'image personnalisée -->
             <label for="file">Téléchargez votre image :</label>
@@ -257,6 +279,56 @@
     });
 </script>
 
+<script type="module">
+  // Charger les données de Firestore
+  async function loadPhoneData() {
+    try {
+      const docRef = doc(db, 'phones', 'phonesData');
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        populatePhoneBrandSelect(data.brands);
+      } else {
+        console.error('Aucune donnée trouvée');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données de Firestore:', error);
+    }
+  }
+
+  // Remplir le select de la marque
+  function populatePhoneBrandSelect(brands) {
+    const phoneBrandSelect = document.getElementById('phoneBrand');
+    const phoneModelSelect = document.getElementById('phoneModel');
+    
+    Object.keys(brands).forEach(brand => {
+      const option = document.createElement('option');
+      option.value = brand;
+      option.textContent = brand;
+      phoneBrandSelect.appendChild(option);
+    });
+
+    // Gérer le changement de marque
+    phoneBrandSelect.addEventListener('change', function() {
+      const selectedBrand = this.value;
+      phoneModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
+      phoneModelSelect.disabled = true;
+
+      if (selectedBrand && brands[selectedBrand]) {
+        phoneModelSelect.disabled = false;
+        brands[selectedBrand].forEach(model => {
+          const option = document.createElement('option');
+          option.value = model;
+          option.textContent = model;
+          phoneModelSelect.appendChild(option);
+        });
+      }
+    });
+  }
+
+  // Charger les données au chargement de la page
+  loadPhoneData();
+</script>
     
 </body>
 </html>
