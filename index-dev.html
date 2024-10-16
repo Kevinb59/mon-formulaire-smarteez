@@ -258,6 +258,9 @@
     const phoneBrandSelect = document.getElementById('phoneBrand');
     const phoneModelSelect = document.getElementById('phoneModel');
     
+    // Vider les options actuelles
+    phoneBrandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
+    
     Object.keys(brands).forEach(brand => {
       const option = document.createElement('option');
       option.value = brand;
