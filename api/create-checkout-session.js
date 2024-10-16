@@ -28,7 +28,7 @@ export default async function handler(req, res) {
               name: 'Coque personnalisée',
               images: [imageUrl], // Lien de l'image uploadée sur Cloudinary
             },
-            unit_amount: 1999, // Prix en centimes (exemple 19,99€)
+            unit_amount: 2490, // Prix en centimes (exemple 19,99€)
           },
           quantity: quantity || 1, // Quantité sélectionnée par l'utilisateur
         },
