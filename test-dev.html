@@ -3,30 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4 Test - Sélection de téléphone</title>
-
-    <!-- Charger Firebase via des balises script depuis le CDN -->
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
-
+    <title>5 Test - Sélection de téléphone</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        label {
+        label, select {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
+            margin: 10px 0;
         }
     </style>
+</head>
+<body>
+    <h1>Test - Sélection de téléphone</h1>
 
-    <script>
+    <label for="phoneBrand">Marque de téléphone :</label>
+    <select id="phoneBrand">
+        <option value="">Chargement...</option>
+    </select>
+
+    <label for="phoneModel">Modèle de téléphone :</label>
+    <select id="phoneModel" disabled>
+        <option value="">Sélectionner un modèle</option>
+    </select>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
         // Configuration Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAOj_aM10Fcmy7EoVRdgAqXrMBQ1gt081o",
@@ -39,36 +44,33 @@
         };
 
         // Initialiser Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        // Charger les données de Firestore
+        // Charger les données des marques et modèles
         async function loadPhoneData() {
             try {
-                const docRef = db.collection('phones').doc('phonesData');
-                const docSnap = await docRef.get();
-                if (docSnap.exists) {
+                const docRef = doc(db, 'phones', 'phonesData');
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
                     const data = docSnap.data();
                     populatePhoneBrandSelect(data.brands);
                 } else {
-                    console.error('Aucune donnée trouvée dans Firestore.');
+                    console.error('Aucune donnée trouvée');
                 }
             } catch (error) {
                 console.error('Erreur lors de la récupération des données de Firestore:', error);
             }
         }
 
-        // Remplir le select des marques
+        // Remplir le select de la marque
         function populatePhoneBrandSelect(brands) {
             const phoneBrandSelect = document.getElementById('phoneBrand');
             const phoneModelSelect = document.getElementById('phoneModel');
 
-            // Vider les options actuelles
             phoneBrandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
-            phoneModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
-            phoneModelSelect.disabled = true;
 
-            // Remplir les marques
             Object.keys(brands).forEach(brand => {
                 const option = document.createElement('option');
                 option.value = brand;
@@ -77,7 +79,7 @@
             });
 
             // Gérer le changement de marque
-            phoneBrandSelect.addEventListener('change', function() {
+            phoneBrandSelect.addEventListener('change', function () {
                 const selectedBrand = this.value;
                 phoneModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
                 phoneModelSelect.disabled = true;
@@ -95,22 +97,7 @@
         }
 
         // Charger les données au chargement de la page
-        window.onload = loadPhoneData;
+        loadPhoneData();
     </script>
-</head>
-<body>
-
-    <h1>Test - Sélection de téléphone</h1>
-
-    <label for="phoneBrand">Marque de téléphone :</label>
-    <select id="phoneBrand">
-        <option value="">Chargement...</option>
-    </select>
-
-    <label for="phoneModel">Modèle de téléphone :</label>
-    <select id="phoneModel" disabled>
-        <option value="">Sélectionner un modèle</option>
-    </select>
-
 </body>
 </html>
