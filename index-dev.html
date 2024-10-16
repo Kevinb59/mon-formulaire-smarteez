@@ -103,61 +103,7 @@
     
 </head>
 <body>
-    
-<script type="module">
-  // Charger les données de Firestore
-  async function loadPhoneData() {
-    try {
-      const docRef = doc(window.db, 'phones', 'phonesData');  // Utilisation de `window.db` pour s'assurer que `db` est disponible
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        populatePhoneBrandSelect(data.brands);
-      } else {
-        console.error('Aucune donnée trouvée');
-      }
-    } catch (error) {
-      console.error('Erreur lors de la récupération des données de Firestore:', error);
-    }
-  }
-
-  // Remplir le select de la marque
-  function populatePhoneBrandSelect(brands) {
-    const phoneBrandSelect = document.getElementById('phoneBrand');
-    const phoneModelSelect = document.getElementById('phoneModel');
-    
-    // Vider les options actuelles
-    phoneBrandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
-    
-    Object.keys(brands).forEach(brand => {
-      const option = document.createElement('option');
-      option.value = brand;
-      option.textContent = brand;
-      phoneBrandSelect.appendChild(option);
-    });
-
-    // Gérer le changement de marque
-    phoneBrandSelect.addEventListener('change', function() {
-      const selectedBrand = this.value;
-      phoneModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
-      phoneModelSelect.disabled = true;
-
-      if (selectedBrand && brands[selectedBrand]) {
-        phoneModelSelect.disabled = false;
-        brands[selectedBrand].forEach(model => {
-          const option = document.createElement('option');
-          option.value = model;
-          option.textContent = model;
-          phoneModelSelect.appendChild(option);
-        });
-      }
-    });
-  }
-
-  // Charger les données au chargement de la page
-  loadPhoneData();
-</script>
-    
+        
 <!-- Conteneur principal pour le formulaire -->
 <div class="container">
     <!-- Formulaire de commande -->
@@ -168,7 +114,7 @@
             <img src="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/main/smarteez.jpg" alt="Smarteez">
             <h2>Commande de coque personnalisée</h2> <!-- Titre du formulaire -->
             <h2>Expédition sous 72h</h2> <!-- Information sur l'expédition -->
-            <h2>---2---</h2>
+            <h2>---3---</h2>
             
             <!-- Saisie du prénom -->
             <label for="firstName">Prénom :</label>
@@ -293,6 +239,57 @@
             }
         }
     });
+</script>
+
+<!-- Charger les données après que Firebase soit complètement initialisé -->
+<script type="module">
+  async function loadPhoneData() {
+    try {
+      const docRef = doc(window.db, 'phones', 'phonesData');
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        populatePhoneBrandSelect(data.brands);
+      } else {
+        console.error('Aucune donnée trouvée');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données de Firestore:', error);
+    }
+  }
+
+  function populatePhoneBrandSelect(brands) {
+    const phoneBrandSelect = document.getElementById('phoneBrand');
+    const phoneModelSelect = document.getElementById('phoneModel');
+    
+    phoneBrandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
+    
+    Object.keys(brands).forEach(brand => {
+      const option = document.createElement('option');
+      option.value = brand;
+      option.textContent = brand;
+      phoneBrandSelect.appendChild(option);
+    });
+
+    phoneBrandSelect.addEventListener('change', function() {
+      const selectedBrand = this.value;
+      phoneModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
+      phoneModelSelect.disabled = true;
+
+      if (selectedBrand && brands[selectedBrand]) {
+        phoneModelSelect.disabled = false;
+        brands[selectedBrand].forEach(model => {
+          const option = document.createElement('option');
+          option.value = model;
+          option.textContent = model;
+          phoneModelSelect.appendChild(option);
+        });
+      }
+    });
+  }
+
+  // Charger les données une fois que tout est prêt
+  loadPhoneData();
 </script>
     
 </body>
