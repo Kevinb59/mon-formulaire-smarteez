@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test - Sélection de téléphone</title>
+    <title>2Test - Sélection de téléphone</title>
 
     <!-- Ajout des fichiers Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
@@ -39,8 +39,8 @@
         };
 
         // Initialiser Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(app);
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
         // Charger les données de Firestore
         async function loadPhoneData() {
