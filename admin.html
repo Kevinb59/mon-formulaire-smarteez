@@ -97,6 +97,36 @@
             });
         });
     </script>
+    
+    <!-- Ajouter Firebase à la page -->
+    <script type="module">
+       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+       import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+    
+       const firebaseConfig = {
+         apiKey: "AIzaSyAOj_aM10Fcmy7EoVRdgAqXrMBQ1gt081o",
+         authDomain: "smart-z-phone-management.firebaseapp.com",
+         projectId: "smart-z-phone-management",
+         storageBucket: "smart-z-phone-management.appspot.com",
+         messagingSenderId: "949078314626",
+         appId: "1:949078314626:web:a2a5cb9d87774dc70251b",
+         measurementId: "G-KV5WM5J2EX"
+       };
+    
+       // Initialiser Firebase
+       const app = initializeApp(firebaseConfig);
+       const db = getFirestore(app);
+       
+       // Fonction pour sauvegarder les données
+       async function savePhoneData(data) {
+         try {
+           await setDoc(doc(db, 'phones', 'phonesData'), data);
+           console.log('Données sauvegardées avec succès');
+         } catch (error) {
+           console.error('Erreur lors de la sauvegarde des données :', error);
+         }
+       }
+    </script>
 
 </body>
 </html>
