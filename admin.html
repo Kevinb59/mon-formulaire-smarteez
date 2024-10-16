@@ -13,7 +13,7 @@
             display: block;
             margin: 10px 0;
         }
-        .brand-container {
+        .brand-container, .model-container {
             margin-bottom: 20px;
         }
     </style>
@@ -23,21 +23,36 @@
     <h1>Gestion des Marques et Modèles de Téléphone</h1>
     
     <div id="phone-management">
-        <!-- Formulaire pour ajouter/modifier des téléphones -->
+        <!-- Formulaire pour ajouter une marque -->
         <div class="brand-container">
+            <label for="newBrandInput">Ajouter une nouvelle marque :</label>
+            <input type="text" id="newBrandInput" placeholder="Nouvelle marque">
+            <button id="addBrandBtn">Ajouter une marque</button>
+        </div>
+
+        <!-- Formulaire pour ajouter un modèle -->
+        <div class="model-container">
             <label for="brandSelect">Marque :</label>
             <select id="brandSelect">
+                <option value="">Sélectionner une marque</option>
                 <!-- Rempli dynamiquement avec les marques existantes -->
             </select>
-        </div>
 
-        <div class="model-container">
             <label for="modelInput">Modèle :</label>
             <input type="text" id="modelInput" placeholder="Ajouter un nouveau modèle">
+            <button id="addModelBtn">Ajouter un modèle</button>
         </div>
 
-        <button id="addModelBtn">Ajouter un modèle</button>
         <button id="saveChangesBtn">Sauvegarder les modifications</button>
+
+        <!-- Section pour visualiser les marques et modèles -->
+        <div class="existing-data">
+            <h2>Liste des Marques et Modèles</h2>
+            <ul id="phoneList"></ul>
+        </div>
+
+        <!-- Bouton pour supprimer une marque ou un modèle -->
+        <button id="deleteBtn">Supprimer une marque ou un modèle</button>
     </div>
 
     <script>
@@ -50,19 +65,48 @@
 
             if (docSnap.exists()) {
                 phonesData = docSnap.data();
-                const brandSelect = document.getElementById('brandSelect');
-
-                // Remplir la liste des marques
-                Object.keys(phonesData.brands).forEach(brand => {
-                    const option = document.createElement('option');
-                    option.value = brand;
-                    option.textContent = brand;
-                    brandSelect.appendChild(option);
-                });
+                updateBrandSelect();
+                displayPhoneList();
             } else {
                 console.log('Aucune donnée trouvée');
             }
         }
+
+        // Mettre à jour la sélection de marque
+        function updateBrandSelect() {
+            const brandSelect = document.getElementById('brandSelect');
+            brandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
+            Object.keys(phonesData.brands).forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandSelect.appendChild(option);
+            });
+        }
+
+        // Afficher la liste des marques et modèles
+        function displayPhoneList() {
+            const phoneList = document.getElementById('phoneList');
+            phoneList.innerHTML = '';
+            Object.entries(phonesData.brands).forEach(([brand, models]) => {
+                const li = document.createElement('li');
+                li.textContent = `${brand}: ${models.join(', ')}`;
+                phoneList.appendChild(li);
+            });
+        }
+
+        // Ajouter une marque
+        document.getElementById('addBrandBtn').addEventListener('click', function() {
+            const newBrand = document.getElementById('newBrandInput').value;
+            if (newBrand && !phonesData.brands[newBrand]) {
+                phonesData.brands[newBrand] = [];
+                updateBrandSelect();
+                displayPhoneList();
+                alert('Marque ajoutée avec succès.');
+            } else {
+                alert('La marque existe déjà ou est invalide.');
+            }
+        });
 
         // Ajouter un modèle à la marque sélectionnée
         document.getElementById('addModelBtn').addEventListener('click', function() {
@@ -70,13 +114,38 @@
             const newModel = document.getElementById('modelInput').value;
 
             if (selectedBrand && newModel) {
-                if (!phonesData.brands[selectedBrand]) {
-                    phonesData.brands[selectedBrand] = [];
+                if (!phonesData.brands[selectedBrand].includes(newModel)) {
+                    phonesData.brands[selectedBrand].push(newModel);
+                    displayPhoneList();
+                    alert('Modèle ajouté avec succès.');
+                } else {
+                    alert('Ce modèle existe déjà.');
                 }
-                phonesData.brands[selectedBrand].push(newModel);
-                alert('Modèle ajouté avec succès.');
             } else {
                 alert('Veuillez sélectionner une marque et entrer un modèle.');
+            }
+        });
+
+        // Supprimer une marque ou un modèle avec confirmation
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            const selectedBrand = document.getElementById('brandSelect').value;
+            const newModel = document.getElementById('modelInput').value;
+
+            if (selectedBrand && !newModel) {
+                if (confirm(`Voulez-vous vraiment supprimer la marque ${selectedBrand} et tous ses modèles ?`)) {
+                    delete phonesData.brands[selectedBrand];
+                    updateBrandSelect();
+                    displayPhoneList();
+                    alert('Marque supprimée avec succès.');
+                }
+            } else if (selectedBrand && newModel && phonesData.brands[selectedBrand].includes(newModel)) {
+                if (confirm(`Voulez-vous vraiment supprimer le modèle ${newModel} de la marque ${selectedBrand} ?`)) {
+                    phonesData.brands[selectedBrand] = phonesData.brands[selectedBrand].filter(model => model !== newModel);
+                    displayPhoneList();
+                    alert('Modèle supprimé avec succès.');
+                }
+            } else {
+                alert('Veuillez sélectionner une marque ou un modèle valide.');
             }
         });
 
