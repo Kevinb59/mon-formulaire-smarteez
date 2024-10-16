@@ -254,34 +254,40 @@
     });
 
     async function createCheckoutSession(imageUrl) {
-        const response = await fetch('/api/create-checkout-session', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                address: document.getElementById('address').value,
-                address2: document.getElementById('address2').value,
-                city: document.getElementById('city').value,
-                postalCode: document.getElementById('postalCode').value,
-                phoneBrand: document.getElementById('phoneBrand').value,
-                phoneModel: document.getElementById('phoneModel').value,
-                customText: document.getElementById('customText').value,
-                imageUrl: imageUrl,
-                quantity: document.getElementById('quantity').value
-            })
-        });
-
-        const session = await response.json();
-        if (session.id) {
+        try {
+            const response = await fetch('/api/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    address: document.getElementById('address').value,
+                    address2: document.getElementById('address2').value,
+                    city: document.getElementById('city').value,
+                    postalCode: document.getElementById('postalCode').value,
+                    phoneBrand: document.getElementById('phoneBrand').value,
+                    phoneModel: document.getElementById('phoneModel').value,
+                    customText: document.getElementById('customText').value,
+                    imageUrl: imageUrl,
+                    quantity: document.getElementById('quantity').value
+                })
+            });
+    
+            if (!response.ok) {
+                const text = await response.text(); // Capturer et afficher le texte d'erreur potentiel
+                console.error('Erreur lors de la création de la session:', text);
+                throw new Error(`Erreur lors de la requête : ${response.status}`);
+            }
+    
+            const session = await response.json();
             const stripe = Stripe('pk_live_51Q0pzz03Hgw1RFXSzt25jEyuePM3OKHJXvpIcmZhA0J0ndyLraMJxxYuGVBI4SV3VnAnLtOEoHV5E4i8xxZAKwKC00dGkEtZ1P');
             stripe.redirectToCheckout({ sessionId: session.id });
-        } else {
-            console.error("Erreur lors de la création de la session de paiement : ", session.error);
+        } catch (error) {
+            console.error("Erreur dans createCheckoutSession :", error);
         }
     }
 </script>
