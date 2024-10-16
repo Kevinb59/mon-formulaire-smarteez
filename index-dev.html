@@ -103,7 +103,61 @@
     
 </head>
 <body>
+    
+<script type="module">
+  // Charger les données de Firestore
+  async function loadPhoneData() {
+    try {
+      const docRef = doc(window.db, 'phones', 'phonesData');  // Utilisation de `window.db` pour s'assurer que `db` est disponible
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        populatePhoneBrandSelect(data.brands);
+      } else {
+        console.error('Aucune donnée trouvée');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données de Firestore:', error);
+    }
+  }
 
+  // Remplir le select de la marque
+  function populatePhoneBrandSelect(brands) {
+    const phoneBrandSelect = document.getElementById('phoneBrand');
+    const phoneModelSelect = document.getElementById('phoneModel');
+    
+    // Vider les options actuelles
+    phoneBrandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
+    
+    Object.keys(brands).forEach(brand => {
+      const option = document.createElement('option');
+      option.value = brand;
+      option.textContent = brand;
+      phoneBrandSelect.appendChild(option);
+    });
+
+    // Gérer le changement de marque
+    phoneBrandSelect.addEventListener('change', function() {
+      const selectedBrand = this.value;
+      phoneModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
+      phoneModelSelect.disabled = true;
+
+      if (selectedBrand && brands[selectedBrand]) {
+        phoneModelSelect.disabled = false;
+        brands[selectedBrand].forEach(model => {
+          const option = document.createElement('option');
+          option.value = model;
+          option.textContent = model;
+          phoneModelSelect.appendChild(option);
+        });
+      }
+    });
+  }
+
+  // Charger les données au chargement de la page
+  loadPhoneData();
+</script>
+    
 <!-- Conteneur principal pour le formulaire -->
 <div class="container">
     <!-- Formulaire de commande -->
@@ -239,60 +293,6 @@
             }
         }
     });
-</script>
-
-<script type="module">
-  // Charger les données de Firestore
-  async function loadPhoneData() {
-    try {
-      const docRef = doc(window.db, 'phones', 'phonesData');  // Utilisation de `window.db` pour s'assurer que `db` est disponible
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        populatePhoneBrandSelect(data.brands);
-      } else {
-        console.error('Aucune donnée trouvée');
-      }
-    } catch (error) {
-      console.error('Erreur lors de la récupération des données de Firestore:', error);
-    }
-  }
-
-  // Remplir le select de la marque
-  function populatePhoneBrandSelect(brands) {
-    const phoneBrandSelect = document.getElementById('phoneBrand');
-    const phoneModelSelect = document.getElementById('phoneModel');
-    
-    // Vider les options actuelles
-    phoneBrandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
-    
-    Object.keys(brands).forEach(brand => {
-      const option = document.createElement('option');
-      option.value = brand;
-      option.textContent = brand;
-      phoneBrandSelect.appendChild(option);
-    });
-
-    // Gérer le changement de marque
-    phoneBrandSelect.addEventListener('change', function() {
-      const selectedBrand = this.value;
-      phoneModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
-      phoneModelSelect.disabled = true;
-
-      if (selectedBrand && brands[selectedBrand]) {
-        phoneModelSelect.disabled = false;
-        brands[selectedBrand].forEach(model => {
-          const option = document.createElement('option');
-          option.value = model;
-          option.textContent = model;
-          phoneModelSelect.appendChild(option);
-        });
-      }
-    });
-  }
-
-  // Charger les données au chargement de la page
-  loadPhoneData();
 </script>
     
 </body>
