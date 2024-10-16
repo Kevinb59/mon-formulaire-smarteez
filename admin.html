@@ -9,50 +9,72 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+        .container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
         label, input, select, button {
             display: block;
             margin: 10px 0;
         }
-        .brand-container, .model-container {
-            margin-bottom: 20px;
+        h2 {
+            margin-top: 0;
         }
     </style>
 </head>
 <body>
 
     <h1>Gestion des Marques et Modèles de Téléphone</h1>
-    
-    <div id="phone-management">
-        <!-- Formulaire pour ajouter une marque -->
-        <div class="brand-container">
-            <label for="newBrandInput">Ajouter une nouvelle marque :</label>
-            <input type="text" id="newBrandInput" placeholder="Nouvelle marque">
-            <button id="addBrandBtn">Ajouter une marque</button>
-        </div>
 
-        <!-- Formulaire pour ajouter un modèle -->
-        <div class="model-container">
-            <label for="brandSelect">Marque :</label>
-            <select id="brandSelect">
-                <option value="">Sélectionner une marque</option>
-                <!-- Rempli dynamiquement avec les marques existantes -->
-            </select>
+    <!-- Premier cadre: Ajouter une nouvelle marque -->
+    <div class="container">
+        <h2>Ajouter une nouvelle marque</h2>
+        <label for="newBrandInput">Nom de la nouvelle marque :</label>
+        <input type="text" id="newBrandInput" placeholder="Nom de la marque">
+        <button id="addBrandBtn">Ajouter une nouvelle marque</button>
+    </div>
 
-            <label for="modelInput">Modèle :</label>
-            <input type="text" id="modelInput" placeholder="Ajouter un nouveau modèle">
-            <button id="addModelBtn">Ajouter un modèle</button>
-        </div>
+    <!-- Deuxième cadre: Ajouter un nouveau modèle -->
+    <div class="container">
+        <h2>Ajouter un nouveau modèle</h2>
+        <label for="brandSelect">Sélectionner une marque :</label>
+        <select id="brandSelect">
+            <option value="">Sélectionner une marque</option>
+        </select>
 
-        <button id="saveChangesBtn">Sauvegarder les modifications</button>
+        <label for="modelInput">Nom du nouveau modèle :</label>
+        <input type="text" id="modelInput" placeholder="Nom du modèle">
+        <button id="addModelBtn">Ajouter un nouveau modèle</button>
+    </div>
 
-        <!-- Section pour visualiser les marques et modèles -->
-        <div class="existing-data">
-            <h2>Liste des Marques et Modèles</h2>
-            <ul id="phoneList"></ul>
-        </div>
+    <!-- Troisième cadre: Supprimer une marque ou un modèle -->
+    <div class="container">
+        <h2>Supprimer une marque ou un modèle</h2>
+        <label for="deleteBrandSelect">Sélectionner une marque :</label>
+        <select id="deleteBrandSelect">
+            <option value="">Sélectionner une marque</option>
+        </select>
 
-        <!-- Bouton pour supprimer une marque ou un modèle -->
-        <button id="deleteBtn">Supprimer une marque ou un modèle</button>
+        <label for="deleteModelSelect">Sélectionner un modèle (facultatif) :</label>
+        <select id="deleteModelSelect">
+            <option value="">Sélectionner un modèle</option>
+        </select>
+
+        <button id="deleteBtn">Supprimer la marque / modèle</button>
+    </div>
+
+    <!-- Quatrième cadre: Sauvegarder les modifications -->
+    <div class="container">
+        <h2>Sauvegarder les modifications</h2>
+        <button id="saveChangesBtn">Sauvegarder</button>
+    </div>
+
+    <!-- Cinquième cadre: Liste des marques et modèles -->
+    <div class="container">
+        <h2>Liste des Marques et Modèles</h2>
+        <ul id="phoneList"></ul>
     </div>
 
     <script type="module">
@@ -76,6 +98,9 @@
 
         let phonesData = { brands: {} }; // Par défaut vide
 
+        // Charger les données au démarrage
+        loadPhonesData();
+
         // Fonction pour charger les données existantes de Firestore
         async function loadPhonesData() {
             try {
@@ -84,7 +109,6 @@
 
                 if (docSnap.exists()) {
                     phonesData = docSnap.data();
-                    console.log("Données récupérées avec succès :", phonesData);
                     updateBrandSelect();
                     displayPhoneList();
                 } else {
@@ -95,38 +119,51 @@
             }
         }
 
-        // Mettre à jour la sélection de marque
+        // Mettre à jour la sélection de marque pour toutes les listes déroulantes
         function updateBrandSelect() {
             const brandSelect = document.getElementById('brandSelect');
+            const deleteBrandSelect = document.getElementById('deleteBrandSelect');
             brandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
+            deleteBrandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
             
-            if (phonesData && phonesData.brands) {
-                Object.keys(phonesData.brands).forEach(brand => {
-                    const option = document.createElement('option');
-                    option.value = brand;
-                    option.textContent = brand;
-                    brandSelect.appendChild(option);
-                });
-            } else {
-                console.error("Aucune marque trouvée dans les données.");
-            }
+            Object.keys(phonesData.brands).forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandSelect.appendChild(option);
+                deleteBrandSelect.appendChild(option);
+            });
         }
+
+        // Mettre à jour la liste des modèles lors de la sélection d'une marque pour suppression
+        document.getElementById('deleteBrandSelect').addEventListener('change', function() {
+            const selectedBrand = this.value;
+            const deleteModelSelect = document.getElementById('deleteModelSelect');
+            deleteModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
+            
+            if (selectedBrand && phonesData.brands[selectedBrand]) {
+                phonesData.brands[selectedBrand].forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model;
+                    deleteModelSelect.appendChild(option);
+                });
+            }
+        });
 
         // Afficher la liste des marques et modèles
         function displayPhoneList() {
             const phoneList = document.getElementById('phoneList');
             phoneList.innerHTML = '';
             
-            if (phonesData && phonesData.brands) {
-                Object.entries(phonesData.brands).forEach(([brand, models]) => {
-                    const li = document.createElement('li');
-                    li.textContent = `${brand}: ${models.join(', ')}`;
-                    phoneList.appendChild(li);
-                });
-            }
+            Object.entries(phonesData.brands).forEach(([brand, models]) => {
+                const li = document.createElement('li');
+                li.textContent = `${brand}: ${models.join(', ')}`;
+                phoneList.appendChild(li);
+            });
         }
 
-        // Ajouter une marque
+        // Ajouter une nouvelle marque
         document.getElementById('addBrandBtn').addEventListener('click', function() {
             const newBrand = document.getElementById('newBrandInput').value;
             if (newBrand && !phonesData.brands[newBrand]) {
@@ -139,7 +176,7 @@
             }
         });
 
-        // Ajouter un modèle à la marque sélectionnée
+        // Ajouter un nouveau modèle à une marque existante
         document.getElementById('addModelBtn').addEventListener('click', function() {
             const selectedBrand = document.getElementById('brandSelect').value;
             const newModel = document.getElementById('modelInput').value;
@@ -159,30 +196,32 @@
 
         // Supprimer une marque ou un modèle avec confirmation
         document.getElementById('deleteBtn').addEventListener('click', function() {
-            const selectedBrand = document.getElementById('brandSelect').value;
-            const newModel = document.getElementById('modelInput').value;
+            const selectedBrand = document.getElementById('deleteBrandSelect').value;
+            const selectedModel = document.getElementById('deleteModelSelect').value;
 
-            if (selectedBrand && !newModel) {
-                if (confirm(`Voulez-vous vraiment supprimer la marque ${selectedBrand} et tous ses modèles ?`)) {
+            if (selectedBrand && !selectedModel) {
+                if (confirm(`Voulez-vous vraiment supprimer la marque "${selectedBrand}" et tous ses modèles ?`)) {
                     delete phonesData.brands[selectedBrand];
                     updateBrandSelect();
                     displayPhoneList();
                     alert('Marque supprimée avec succès.');
                 }
-            } else if (selectedBrand && newModel && phonesData.brands[selectedBrand].includes(newModel)) {
-                if (confirm(`Voulez-vous vraiment supprimer le modèle ${newModel} de la marque ${selectedBrand} ?`)) {
-                    phonesData.brands[selectedBrand] = phonesData.brands[selectedBrand].filter(model => model !== newModel);
+            } else if (selectedBrand && selectedModel) {
+                if (confirm(`Voulez-vous vraiment supprimer le modèle "${selectedModel}" de la marque "${selectedBrand}" ?`)) {
+                    phonesData.brands[selectedBrand] = phonesData.brands[selectedBrand].filter(model => model !== selectedModel);
                     displayPhoneList();
                     alert('Modèle supprimé avec succès.');
                 }
             } else {
-                alert('Veuillez sélectionner une marque ou un modèle valide.');
+                alert('Veuillez sélectionner une marque et un modèle valide.');
             }
         });
 
-        // Sauvegarder les modifications dans Firestore
+        // Sauvegarder les modifications dans Firestore avec confirmation
         document.getElementById('saveChangesBtn').addEventListener('click', function() {
-            savePhoneData(phonesData);
+            if (confirm("Voulez-vous vraiment sauvegarder toutes les modifications ?")) {
+                savePhoneData(phonesData);
+            }
         });
 
         // Fonction pour sauvegarder les données dans Firestore
@@ -195,9 +234,6 @@
                 alert('Erreur lors de la sauvegarde des données.');
             }
         }
-
-        // Charger les données au démarrage
-        loadPhonesData();
     </script>
 
 </body>
