@@ -78,9 +78,10 @@
     </style>
 
     <script type="module">
+      // Importation de Firebase
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
       import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-    
+      
       // Configuration Firebase
       const firebaseConfig = {
         apiKey: "AIzaSyAOj_aM10Fcmy7EoVRdgAqXrMBQ1gt081o",
@@ -95,6 +96,9 @@
       // Initialiser Firebase
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
+    
+      // Rendre la variable `db` disponible globalement
+      window.db = db;
     </script>
     
 </head>
@@ -240,7 +244,7 @@
   // Charger les données de Firestore
   async function loadPhoneData() {
     try {
-      const docRef = doc(db, 'phones', 'phonesData');
+      const docRef = doc(window.db, 'phones', 'phonesData');  // Utilisation de `window.db` pour s'assurer que `db` est disponible
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
