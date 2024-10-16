@@ -41,16 +41,15 @@
     </div>
 
     <script>
-        // URL brute de phones.json
-        const jsonUrl = '/phones.json';
+        let phonesData = { brands: {} }; // Par défaut vide
 
-        let phonesData = {};
+        // Fonction pour charger les données existantes de Firestore
+        async function loadPhonesData() {
+            const docRef = doc(db, 'phones', 'phonesData');
+            const docSnap = await getDoc(docRef);
 
-        // Charger les données JSON existantes
-        fetch(jsonUrl)
-            .then(response => response.json())
-            .then(data => {
-                phonesData = data;
+            if (docSnap.exists()) {
+                phonesData = docSnap.data();
                 const brandSelect = document.getElementById('brandSelect');
 
                 // Remplir la liste des marques
@@ -60,7 +59,10 @@
                     option.textContent = brand;
                     brandSelect.appendChild(option);
                 });
-            });
+            } else {
+                console.log('Aucune donnée trouvée');
+            }
+        }
 
         // Ajouter un modèle à la marque sélectionnée
         document.getElementById('addModelBtn').addEventListener('click', function() {
@@ -78,30 +80,19 @@
             }
         });
 
-        // Sauvegarder les modifications
+        // Sauvegarder les modifications dans Firestore
         document.getElementById('saveChangesBtn').addEventListener('click', function() {
-            fetch('/api/update-phones', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(phonesData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-            })
-            .catch(error => {
-                console.error('Erreur lors de la sauvegarde :', error);
-                alert('Erreur lors de la sauvegarde.');
-            });
+            savePhoneData(phonesData);
         });
+
+        // Charger les données au démarrage
+        loadPhonesData();
     </script>
-    
+
     <!-- Ajouter Firebase à la page -->
     <script type="module">
        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-       import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+       import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
     
        const firebaseConfig = {
          apiKey: "AIzaSyAOj_aM10Fcmy7EoVRdgAqXrMBQ1gt081o",
@@ -121,9 +112,10 @@
        async function savePhoneData(data) {
          try {
            await setDoc(doc(db, 'phones', 'phonesData'), data);
-           console.log('Données sauvegardées avec succès');
+           alert('Données sauvegardées avec succès');
          } catch (error) {
            console.error('Erreur lors de la sauvegarde des données :', error);
+           alert('Erreur lors de la sauvegarde des données.');
          }
        }
     </script>
