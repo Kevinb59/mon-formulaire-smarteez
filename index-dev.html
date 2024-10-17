@@ -209,6 +209,7 @@
 
         <div class="frame">
             <button type="button" id="paymentButton">Payer maintenant</button>
+            <button id="checkout-button">Payer maintenant TEST</button>
         </div>
     </form>
 </div>
@@ -218,6 +219,30 @@
     <p><a href="mailto:contact@smart-z.fr" style="color: #5b287c; text-decoration: none; font-weight: bold;">contact@smart-z.fr</a></p>
 </div>
 
+<script>
+  const stripe = Stripe('pk_live_51Q0pzz03Hgw1RFXSzt25jEyuePM3OKHJXvpIcmZhA0J0ndyLraMJxxYuGVBI4SV3VnAnLtOEoHV5E4i8xxZAKwKC00dGkEtZ1P'); // Utilise ta clé publique Stripe
+
+  const checkoutButton = document.getElementById('checkout-button');
+
+  checkoutButton.addEventListener('click', () => {
+    fetch('/api/create-checkout-session', {
+      method: 'POST',
+    })
+    .then(response => response.json())
+    .then(session => {
+      return stripe.redirectToCheckout({ sessionId: session.id });
+    })
+    .then(result => {
+      if (result.error) {
+        alert(result.error.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  });
+</script>
+    
 <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 <script>
     const paymentButton = document.getElementById('paymentButton');
