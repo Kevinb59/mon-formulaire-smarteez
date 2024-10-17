@@ -2,27 +2,63 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
+    const {
+      firstName, lastName, email, phone, address, address2, city, postalCode,
+      phoneBrand, phoneModel, imageUrl, customText, quantity
+    } = req.body;
+
     try {
+      // Affiche les métadonnées dans la console du serveur avant de créer la session
+      console.log('Métadonnées envoyées à Stripe:', {
+        firstName,
+        lastName,
+        email,
+        phone,
+        address,
+        address2,
+        city,
+        postalCode,
+        phoneBrand,
+        phoneModel,
+        customText: customText || '', // Champ optionnel
+        imageUrl
+      });
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [
           {
             price_data: {
-              currency: 'eur', // Remplace 'eur' par la devise que tu souhaites utiliser
+              currency: 'eur',
               product_data: {
-                name: 'Nom du produit', // Remplace par le nom de ton produit
+                name: `Coque personnalisée (${phoneBrand} ${phoneModel})`,
+                images: [imageUrl], // Lien de l'image Cloudinary
               },
-              unit_amount: 1000, // Le prix en centimes (1000 = 10 euros)
+              unit_amount: 2490, // Ajuste le prix unitaire (en centimes)
             },
-            quantity: 1, // Tu peux récupérer la quantité depuis ton formulaire si nécessaire
+            quantity: parseInt(quantity), // Quantité
           },
         ],
         mode: 'payment',
-        success_url: `${req.headers.origin}/success.html`, // Redirige vers cette URL après un paiement réussi
-        cancel_url: `${req.headers.origin}/cancel.html`, // Redirige ici si le client annule le paiement
+        customer_email: email,
+        metadata: {
+          firstName,
+          lastName,
+          phone,
+          address,
+          address2,
+          city,
+          postalCode,
+          phoneBrand,
+          phoneModel,
+          customText: customText || '', // Champ optionnel
+          imageUrl
+        },
+        success_url: `${req.headers.origin}/success.html`,
+        cancel_url: `${req.headers.origin}/cancel.html`,
       });
 
-      res.status(200).json({ id: session.id }); // Renvoie l'ID de la session au frontend
+      res.status(200).json({ id: session.id });
     } catch (err) {
       console.error('Erreur lors de la création de la session Stripe:', err);
       res.status(500).json({ error: err.message });
