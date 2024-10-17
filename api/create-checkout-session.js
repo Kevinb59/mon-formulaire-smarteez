@@ -1,36 +1,37 @@
-// create-checkout-session.js
-
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Clé secrète Stripe
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Utilisation de la clé secrète Stripe
 
 export default async function handler(req, res) {
+  // Autorise uniquement les requêtes POST
   if (req.method === 'POST') {
     try {
-      // Créer une session de paiement
+      // Créer la session de paiement
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [
           {
             price_data: {
-              currency: 'eur',
+              currency: 'eur', // Devise
               product_data: {
-                name: 'Produit Test', // Nom du produit (remplaçable plus tard)
+                name: 'Produit Test', // Nom du produit
               },
-              unit_amount: 1000, // Prix en centimes (10€ ici)
+              unit_amount: 1000, // Prix en centimes (ici 10€)
             },
-            quantity: 1,
+            quantity: 1, // Quantité (tu pourras le rendre dynamique plus tard)
           },
         ],
-        mode: 'payment',
-        success_url: `${req.headers.origin}/success.html`,
-        cancel_url: `${req.headers.origin}/cancel.html`,
+        mode: 'payment', // Mode de paiement unique
+        success_url: `${req.headers.origin}/success.html`, // Redirection en cas de succès
+        cancel_url: `${req.headers.origin}/cancel.html`, // Redirection en cas d'annulation
       });
 
-      // Réponse contenant l'ID de la session
+      // Renvoie l'ID de la session au client
       res.status(200).json({ id: session.id });
     } catch (err) {
+      // Gestion des erreurs
       res.status(500).json({ error: err.message });
     }
   } else {
+    // Si la méthode n'est pas POST, renvoie une erreur 405
     res.setHeader('Allow', 'POST');
     res.status(405).end('Méthode non autorisée');
   }
