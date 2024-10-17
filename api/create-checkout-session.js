@@ -1,58 +1,37 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+// create-checkout-session.js
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Clé secrète Stripe
 
 export default async function handler(req, res) {
-  const { 
-    firstName, 
-    lastName, 
-    email, 
-    phone, 
-    address, 
-    address2, 
-    city, 
-    postalCode, 
-    phoneBrand, 
-    phoneModel, 
-    customText, 
-    imageUrl, 
-    quantity 
-  } = req.body;
-
-  try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'eur',
-            product_data: {
-              name: 'Coque personnalisée',
-              images: [imageUrl], // Lien de l'image uploadée sur Cloudinary
+  if (req.method === 'POST') {
+    try {
+      // Créer une session de paiement
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'eur',
+              product_data: {
+                name: 'Produit Test', // Nom du produit (remplaçable plus tard)
+              },
+              unit_amount: 1000, // Prix en centimes (10€ ici)
             },
-            unit_amount: 2490, // Prix en centimes (exemple 19,99€)
+            quantity: 1,
           },
-          quantity: quantity || 1, // Quantité sélectionnée par l'utilisateur
-        },
-      ],
-      mode: 'payment',
-      success_url: `${req.headers.origin}/confirmation?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin}/cancel`,
-      metadata: {
-        firstName,
-        lastName,
-        email,
-        phone,
-        address,
-        address2,
-        city,
-        postalCode,
-        phoneBrand,
-        phoneModel,
-        customText,
-      },
-    });
+        ],
+        mode: 'payment',
+        success_url: `${req.headers.origin}/success.html`,
+        cancel_url: `${req.headers.origin}/cancel.html`,
+      });
 
-    res.status(200).json({ id: session.id });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+      // Réponse contenant l'ID de la session
+      res.status(200).json({ id: session.id });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  } else {
+    res.setHeader('Allow', 'POST');
+    res.status(405).end('Méthode non autorisée');
   }
 }
