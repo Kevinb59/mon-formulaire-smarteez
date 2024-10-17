@@ -3,29 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test de l'API Stripe avec GET</title>
+  <title>Test du Paiement Stripe</title>
   <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
-  <h1>Test de l'API Stripe avec GET</h1>
-  <button id="checkout-button">Tester l'API</button>
+  <h1>Test du Paiement Stripe</h1>
+  <button id="checkout-button">Payer maintenant</button>
 
   <script>
-    // Fonction pour tester l'API via GET
-    const checkoutButton = document.getElementById('checkout-button');
+    const stripe = Stripe('pk_live_51Q0pzz03Hgw1RFXSzt25jEyuePM3OKHJXvpIcmZhA0J0ndyLraMJxxYuGVBI4SV3VnAnLtOEoHV5E4i8xxZAKwKC00dGkEtZ1P');
 
-    checkoutButton.addEventListener('click', () => {
-      // Appel à l'API Vercel en GET
+    document.getElementById('checkout-button').addEventListener('click', () => {
       fetch('/api/create-checkout-session', {
-        method: 'GET',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
       })
       .then(response => response.json())
-      .then(data => {
-        console.log(data); // Devrait afficher { message: 'API fonctionne avec GET' }
-        alert('Réponse de l\'API : ' + JSON.stringify(data));
+      .then(session => {
+        return stripe.redirectToCheckout({ sessionId: session.id });
+      })
+      .then(result => {
+        if (result.error) {
+          alert(result.error.message);
+        }
       })
       .catch(error => {
-        console.error('Erreur:', error);
+        console.error('Erreur lors de la création de la session Stripe:', error);
       });
     });
   </script>
