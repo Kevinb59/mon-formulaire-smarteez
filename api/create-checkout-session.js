@@ -1,25 +1,34 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
-  if (req.method === 'GET') {
+  if (req.method === 'POST') {
     try {
-      // Vérifie si Stripe est bien configuré
-      if (!process.env.STRIPE_SECRET_KEY) {
-        throw new Error('Clé Stripe non configurée');
-      }
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'eur', // Remplace 'eur' par la devise que tu souhaites utiliser
+              product_data: {
+                name: 'Nom du produit', // Remplace par le nom de ton produit
+              },
+              unit_amount: 1000, // Le prix en centimes (1000 = 10 euros)
+            },
+            quantity: 1, // Tu peux récupérer la quantité depuis ton formulaire si nécessaire
+          },
+        ],
+        mode: 'payment',
+        success_url: `${req.headers.origin}/success.html`, // Redirige vers cette URL après un paiement réussi
+        cancel_url: `${req.headers.origin}/cancel.html`, // Redirige ici si le client annule le paiement
+      });
 
-      // Log pour vérifier que la clé Stripe est bien détectée
-      console.log('Clé Stripe détectée : ', process.env.STRIPE_SECRET_KEY);
-
-      // Réponse pour tester la route GET
-      res.status(200).json({ message: 'API fonctionne avec GET' });
+      res.status(200).json({ id: session.id }); // Renvoie l'ID de la session au frontend
     } catch (err) {
-      // Log de l'erreur rencontrée
       console.error('Erreur lors de la création de la session Stripe:', err);
       res.status(500).json({ error: err.message });
     }
   } else {
-    res.setHeader('Allow', 'GET');
+    res.setHeader('Allow', 'POST');
     res.status(405).end('Méthode non autorisée');
   }
 }
