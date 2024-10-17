@@ -34,7 +34,7 @@ export default async function handler(req, res) {
                 name: `Coque personnalisée (${phoneBrand} ${phoneModel})`,
                 images: [imageUrl], // Lien de l'image Cloudinary
               },
-              unit_amount: 2490, // Ajuste le prix unitaire (en centimes)
+              unit_amount: 0, // Ajuste le prix unitaire (en centimes)
             },
             quantity: parseInt(quantity), // Quantité
           },
