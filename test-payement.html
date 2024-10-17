@@ -11,16 +11,30 @@
   <button id="checkout-button">Payer maintenant</button>
 
   <script>
-    const stripe = Stripe('pk_live_51Q0pzz03Hgw1RFXSzt25jEyuePM3OKHJXvpIcmZhA0J0ndyLraMJxxYuGVBI4SV3VnAnLtOEoHV5E4i8xxZAKwKC00dGkEtZ1P'); // Remplace par ta clé publique
+    // Initialisation de Stripe avec la clé publique
+    const stripe = Stripe('pk_live_51Q0pzz03Hgw1RFXSzt25jEyuePM3OKHJXvpIcmZhA0J0ndyLraMJxxYuGVBI4SV3VnAnLtOEoHV5E4i8xxZAKwKC00dGkEtZ1P');
 
     const checkoutButton = document.getElementById('checkout-button');
 
     checkoutButton.addEventListener('click', () => {
+      // Appel de l'API Vercel pour créer la session de paiement
       fetch('/api/create-checkout-session', {
-        method: 'POST',
+        method: 'POST', // Méthode POST
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          // Tu peux ajouter ici des informations du formulaire si nécessaire plus tard
+        }),
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Échec de la création de la session');
+        }
+        return response.json();
+      })
       .then(session => {
+        // Redirection vers Stripe Checkout
         return stripe.redirectToCheckout({ sessionId: session.id });
       })
       .then(result => {
@@ -29,7 +43,7 @@
         }
       })
       .catch(error => {
-        console.error('Error:', error);
+        console.error('Erreur:', error);
       });
     });
   </script>
