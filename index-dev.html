@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <!-- Métadonnées de la page -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart-Z - Coque personnalisée</title>
@@ -9,7 +8,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/Favicon.png">
 
-    <!-- Styles CSS pour la mise en page -->
+    <!-- Styles CSS -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -72,7 +71,7 @@
         }
     </style>
 
-    <!-- Firebase et Firestore -->
+    <!-- Firebase & Firestore -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
@@ -262,7 +261,7 @@
         }
 
         try {
-            const response = await fetch('https://us-central1-YOUR_PROJECT_ID.cloudfunctions.net/createCheckoutSession', {
+            const response = await fetch('https://us-central1-smart-z-phone-management.cloudfunctions.net/createCheckoutSession', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
