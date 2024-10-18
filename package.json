@@ -1,0 +1,13 @@
+{
+  "name": "smart-z",
+  "version": "1.0.0",
+  "description": "Coques personnalisées",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo \"No build step required\""
+  },
+  "dependencies": {
+    "stripe": "^10.0.0",
+    "express": "^4.17.1"
+  }
+}
