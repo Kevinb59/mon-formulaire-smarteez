@@ -15,7 +15,7 @@ export default async function handler(req, res) {
                 name: `Coque personnalisée - ${phoneBrand} ${phoneModel}`,
                 images: [imageUrl],
               },
-              unit_amount: 2490,
+              unit_amount: 0,
             },
             quantity: quantity,
           },
