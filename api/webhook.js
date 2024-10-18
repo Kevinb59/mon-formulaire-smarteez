@@ -1,25 +1,32 @@
+import { buffer } from 'micro';  // Utilisation de 'micro' pour traiter le raw body
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET; // Clé secrète du Webhook
+
+export const config = {
+  api: {
+    bodyParser: false, // Désactiver le bodyParser pour Stripe
+  },
+};
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
+    const buf = await buffer(req);  // Obtenir le raw body de la requête
     const sig = req.headers['stripe-signature'];
+
     let event;
 
     try {
-      const rawBody = await buffer(req);  // On obtient le corps brut de la requête
-      event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
+      event = stripe.webhooks.constructEvent(buf.toString(), sig, endpointSecret);  // Utilisation du raw body pour vérifier la signature
     } catch (err) {
-      console.error('Erreur lors de la vérification de la signature Webhook:', err.message);
+      console.error('Erreur lors de la vérification de la signature Webhook:', err);
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    // Traitement de l'événement 'checkout.session.completed'
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
       const metadata = session.metadata;
 
-      console.log('Données du Webhook:', metadata);
+      console.log('Données reçues du Webhook:', metadata);
 
       const googleAppsScriptUrl = `https://script.google.com/macros/s/${process.env.YOUR_SCRIPT_ID}/exec`;
 
@@ -35,7 +42,7 @@ export default async function handler(req, res) {
         const result = await response.json();
         console.log('Réponse du Google Apps Script:', result);
       } catch (err) {
-        console.error('Erreur lors de l\'envoi des données vers Google Apps Script:', err.message);
+        console.error('Erreur lors de l\'envoi des données vers Google Apps Script:', err);
       }
     }
 
@@ -44,24 +51,4 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'POST');
     res.status(405).end('Méthode non autorisée');
   }
-}
-
-export const config = {
-  api: {
-    bodyParser: false,  // Désactiver le bodyParser pour lire les requêtes brutes (raw body)
-  },
-};
-
-// Fonction pour lire le corps brut de la requête
-function buffer(req) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    req.on('data', (chunk) => {
-      chunks.push(chunk);
-    });
-    req.on('end', () => {
-      resolve(Buffer.concat(chunks));
-    });
-    req.on('error', reject);
-  });
 }
