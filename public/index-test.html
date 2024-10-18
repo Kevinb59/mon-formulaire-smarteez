@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Z - Coque personnalisée</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/Favicon.png">
+
+    <!-- Styles CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b7d397;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .frame {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        img {
+            display: block;
+            width: 100%;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #5b287c;
+        }
+        h1 {
+            font-size: 4em;
+        }
+        h2 {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+        label {
+            font-weight: bold;
+            color: #333;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #5b287c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+        button:hover {
+            background-color: #472362;
+        }
+        select {
+            font-size: 12px;
+        }
+    </style>
+
+    <!-- Firebase & Firestore -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyAOj_aM10Fcmy7EoVRdgAqXrMBQ1gt081o",
+            authDomain: "smart-z-phone-management.firebaseapp.com",
+            projectId: "smart-z-phone-management",
+            storageBucket: "smart-z-phone-management.appspot.com",
+            messagingSenderId: "949078314626",
+            appId: "1:949078314626:web:a2a5cb9d87774dc70251b",
+            measurementId: "G-KV5WM5J2EX"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.db = db; 
+
+        async function loadPhoneData() {
+            try {
+                const docRef = doc(db, 'phones', 'phonesData');
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    populatePhoneBrandSelect(data.brands);
+                } else {
+                    console.error('Aucune donnée trouvée');
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des données Firestore:', error);
+            }
+        }
+
+        function populatePhoneBrandSelect(brands) {
+            const phoneBrandSelect = document.getElementById('phoneBrand');
+            const phoneModelSelect = document.getElementById('phoneModel');
+            
+            phoneBrandSelect.innerHTML = '<option value="">Sélectionner une marque</option>';
+            
+            Object.keys(brands).forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                phoneBrandSelect.appendChild(option);
+            });
+
+            phoneBrandSelect.addEventListener('change', function() {
+                const selectedBrand = this.value;
+                phoneModelSelect.innerHTML = '<option value="">Sélectionner un modèle</option>';
+                phoneModelSelect.disabled = true;
+
+                if (selectedBrand && brands[selectedBrand]) {
+                    phoneModelSelect.disabled = false;
+                    brands[selectedBrand].forEach(model => {
+                        const option = document.createElement('option');
+                        option.value = model;
+                        option.textContent = model;
+                        phoneModelSelect.appendChild(option);
+                    });
+                }
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPhoneData();
+        });
+    </script>
+    
+</head>
+<body>
+
+<div class="container">
+    <form id="orderForm" enctype="multipart/form-data" novalidate>
+        <div class="frame">
+            <img src="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/Logo%20Smart-Z.jpg" alt="Smarteez">
+            <h2>Commande de coque personnalisée</h2>
+            <h2>Expédition sous 72h</h2>
+
+            <label for="firstName">Prénom :</label>
+            <input type="text" id="firstName" name="firstName" placeholder="Votre prénom" required>
+
+            <label for="lastName">Nom :</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Votre nom" required>
+
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="email" placeholder="Votre email" required>
+
+            <label for="phone">Téléphone :</label>
+            <input type="tel" id="phone" name="phone" placeholder="Votre numéro de téléphone" required>
+
+            <label for="address">Adresse :</label>
+            <input type="text" id="address" name="address" placeholder="Numéro et rue" required>
+
+            <label for="address2">Complément d'adresse :</label>
+            <input type="text" id="address2" name="address2" placeholder="Complément d'adresse">
+
+            <label for="city">Ville :</label>
+            <input type="text" id="city" name="city" placeholder="Ville" required>
+
+            <label for="postalCode">Code Postal :</label>
+            <input type="text" id="postalCode" name="postalCode" placeholder="Code Postal" required>
+        </div>
+
+        <div class="frame">
+            <label for="phoneBrand">Marque de téléphone :</label>
+            <select id="phoneBrand" name="phoneBrand" required>
+              <option value="">Sélectionner une marque</option>
+            </select>
+
+            <label for="phoneModel">Modèle de téléphone :</label>
+            <select id="phoneModel" name="phoneModel" required disabled>
+              <option value="">Sélectionner un modèle</option>
+            </select>
+
+            <label for="file">Téléchargez votre image :</label>
+            <input type="file" id="file" name="file" accept="image/*" required>
+
+            <label for="customText">Texte personnalisé (optionnel) :</label>
+            <textarea id="customText" name="customText" placeholder="Texte personnalisé pour votre coque" rows="4"></textarea>
+
+            <label for="quantity">Quantité de coques :</label>
+            <input type="number" id="quantity" name="quantity" placeholder="Nombre de coques" required>
+        </div>
+
+        <div class="frame">
+            <button type="button" id="paymentButton">Payer maintenant</button>
+        </div>
+    </form>
+</div>
+
+<div class="frame" style="margin-top: 20px; width: 100%; max-width: 600px; margin: 20px auto; text-align: center; padding: 20px; border: 2px solid #5b287c; border-radius: 10px;">
+    <p>Si vous avez des questions ou des demandes spécifiques, n'hésitez pas à nous contacter :</p>
+    <p><a href="mailto:contact@smart-z.fr" style="color: #5b287c; text-decoration: none; font-weight: bold;">contact@smart-z.fr</a></p>
+</div>
+
+<script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const paymentButton = document.getElementById('paymentButton');
+    
+    paymentButton.addEventListener('click', async function() {
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
+        const address2 = document.getElementById('address2').value;
+        const city = document.getElementById('city').value;
+        const postalCode = document.getElementById('postalCode').value;
+        const phoneBrand = document.getElementById('phoneBrand').value;
+        const phoneModel = document.getElementById('phoneModel').value;
+        const customText = document.getElementById('customText').value;
+        const quantity = document.getElementById('quantity').value;
+
+        const fileInput = document.getElementById('file');
+        const file = fileInput.files[0];
+
+        let imageUrl = '';
+
+        if (file) {
+            const cloudName = 'dwjkmwlyb';
+            const uploadPreset = 'smarteez_orders';
+            const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', uploadPreset);
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.secure_url) {
+                    imageUrl = data.secure_url;
+                } else {
+                    console.error("Erreur lors de l'upload de l'image : ", data.error);
+                    return;
+                }
+            } catch (error) {
+                console.error('Erreur lors de l\'upload vers Cloudinary:', error);
+                return;
+            }
+        }
+
+        try {
+            const response = await fetch('/api/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    address,
+                    address2,
+                    city,
+                    postalCode,
+                    phoneBrand,
+                    phoneModel,
+                    customText,
+                    imageUrl,
+                    quantity
+                }),
+            });
+
+            const session = await response.json();
+            if (session.id) {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            } else {
+                console.error("Erreur lors de la création de la session Stripe : ", session);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la création de la session Stripe :', error);
+        }
+    });
+</script>
+</body>
+</html>
