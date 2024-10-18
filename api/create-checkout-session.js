@@ -1,51 +1,65 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const cors = require('cors');
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { firstName, lastName, email, phone, address, address2, city, postalCode, phoneBrand, phoneModel, customText, imageUrl, quantity } = req.body;
+  // Activer CORS pour permettre les requêtes cross-origin
+  const corsHandler = cors({
+    origin: 'https://smart-z.vercel.app', // Le domaine depuis lequel les requêtes sont acceptées
+    methods: ['POST'],
+    allowedHeaders: ['Content-Type']
+  });
 
-    try {
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: [
-          {
-            price_data: {
-              currency: 'eur',
-              product_data: {
-                name: `Coque personnalisée - ${phoneBrand} ${phoneModel}`,
-                images: [imageUrl],
+  return corsHandler(req, res, async () => {
+    if (req.method === 'POST') {
+      const {
+        firstName, lastName, email, phone,
+        address, address2, city, postalCode,
+        phoneBrand, phoneModel, customText, imageUrl, quantity
+      } = req.body;
+
+      try {
+        const session = await stripe.checkout.sessions.create({
+          payment_method_types: ['card'],
+          line_items: [
+            {
+              price_data: {
+                currency: 'eur',
+                product_data: {
+                  name: `Coque personnalisée - ${phoneBrand} ${phoneModel}`,
+                  images: [imageUrl], // URL de l'image fournie
+                },
+                unit_amount: 2490, // Remplace par le prix unitaire réel en centimes d'euros (ex: 24,90 € => 2490)
               },
-              unit_amount: 0,
+              quantity: quantity, // Quantité d'articles choisie dans le formulaire
             },
-            quantity: quantity,
+          ],
+          mode: 'payment',
+          success_url: 'https://smart-z.vercel.app/success',
+          cancel_url: 'https://smart-z.vercel.app/cancel',
+          metadata: {
+            firstName,
+            lastName,
+            email,
+            phone,
+            address,
+            address2,
+            city,
+            postalCode,
+            phoneBrand,
+            phoneModel,
+            customText,
+            imageUrl,
+            quantity,
           },
-        ],
-        mode: 'payment',
-        success_url: 'https://www.smart-z.fr/success',
-        cancel_url: 'https://www.smart-z.fr/cancel',
-        metadata: {
-          firstName,
-          lastName,
-          email,
-          phone,
-          address,
-          address2,
-          city,
-          postalCode,
-          phoneBrand,
-          phoneModel,
-          customText,
-          imageUrl,
-          quantity,
-        },
-      });
+        });
 
-      res.status(200).json({ id: session.id });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
+        res.status(200).json({ id: session.id });
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
+    } else {
+      res.setHeader('Allow', 'POST');
+      res.status(405).end('Method Not Allowed');
     }
-  } else {
-    res.setHeader('Allow', 'POST');
-    res.status(405).end('Method Not Allowed');
-  }
+  });
 }
