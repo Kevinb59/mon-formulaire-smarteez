@@ -10,6 +10,8 @@ export const config = {
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
+    console.log('Requête POST reçue');
+
     const buf = await buffer(req);  // Obtenir le raw body de la requête
     const sig = req.headers['stripe-signature'];
 
@@ -17,11 +19,13 @@ export default async function handler(req, res) {
 
     try {
       event = stripe.webhooks.constructEvent(buf.toString(), sig, endpointSecret);  // Utilisation du raw body pour vérifier la signature
+      console.log('Signature Webhook validée');
     } catch (err) {
       console.error('Erreur lors de la vérification de la signature Webhook:', err);
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
+    // Gestion de l'événement 'checkout.session.completed'
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
       const metadata = session.metadata;
