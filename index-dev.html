@@ -261,7 +261,7 @@
         }
 
         try {
-            const response = await fetch('https://us-central1-smart-z-phone-management.cloudfunctions.net/createCheckoutSession', {
+            const response = await fetch('/api/create-checkout-session', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
