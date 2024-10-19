@@ -2,38 +2,36 @@ const nodemailer = require('nodemailer');
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    // Recevoir les données Stripe
+    // Recevoir les données Stripe (pour plus tard)
     const stripeEvent = req.body;
 
     // Retourner immédiatement 200 à Stripe pour confirmer la réception
     res.status(200).send('Webhook reçu');
 
-    // Configurer le transporteur d'emails Nodemailer
+    // Configurer Nodemailer pour envoyer des mails
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
+        user: process.env.EMAIL_USER, // Ton adresse Gmail
+        pass: process.env.EMAIL_PASS, // Le mot de passe d'application généré
+      },
     });
 
-    // Créer l'email à envoyer
+    // Options de l'email
     const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: 'sasmarteez@gmail.com',
-      subject: 'Nouvelle commande reçue',
-      text: 'Une nouvelle commande a été passée via Stripe.'
+      from: process.env.EMAIL_USER, // L'adresse de l'expéditeur
+      to: 'sasmarteez@gmail.com', // L'adresse de réception (là où tu veux envoyer l'email)
+      subject: 'Test d\'envoi de mail avec Nodemailer',
+      text: 'Ceci est un test d\'envoi de mail avec Nodemailer depuis Vercel.', // Contenu du mail
     };
 
-    // Envoyer l'email avec Nodemailer
-    transporter.sendMail(mailOptions, function(error, info) {
-      if (error) {
-        console.error('Erreur lors de l\'envoi de l\'email:', error);
-      } else {
-        console.log('Email envoyé avec succès:', info.response);
-      }
-    });
-    
+    // Envoyer l'email
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log('Email envoyé avec succès');
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi de l\'email:', error);
+    }
   } else {
     res.setHeader('Allow', 'POST');
     res.status(405).end('Méthode non autorisée');
