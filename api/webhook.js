@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const nodemailer = require('nodemailer');
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -8,24 +8,32 @@ export default async function handler(req, res) {
     // Retourner immédiatement 200 à Stripe pour confirmer la réception
     res.status(200).send('Webhook reçu');
 
-    // Transférer les métadonnées à Google Apps Script
-    try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbwhcuqH8Gomtd56Jn5RkhM_9MqaVqamvHUd1yjgDvetXLTovHZpbPSWQNppNVbClVrfKg/exec', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(stripeEvent),
-      });
-
-      if (!response.ok) {
-        console.error('Erreur lors de l’envoi à Google Apps Script:', response.statusText);
-      } else {
-        console.log('Données transmises à Google Apps Script avec succès.');
+    // Configurer le transporteur d'emails Nodemailer
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
       }
-    } catch (error) {
-      console.error('Erreur lors de la requête vers Google Apps Script:', error);
-    }
+    });
+
+    // Créer l'email à envoyer
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: 'sasmarteez@gmail.com',
+      subject: 'Nouvelle commande reçue',
+      text: 'Une nouvelle commande a été passée via Stripe.'
+    };
+
+    // Envoyer l'email avec Nodemailer
+    transporter.sendMail(mailOptions, function(error, info) {
+      if (error) {
+        console.error('Erreur lors de l\'envoi de l\'email:', error);
+      } else {
+        console.log('Email envoyé avec succès:', info.response);
+      }
+    });
+    
   } else {
     res.setHeader('Allow', 'POST');
     res.status(405).end('Méthode non autorisée');
