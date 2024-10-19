@@ -28,14 +28,14 @@ export default async function handler(req, res) {
                   name: `Coque personnalisée - ${phoneBrand} ${phoneModel}`,
                   images: [imageUrl], // URL de l'image fournie
                 },
-                unit_amount: 2490, // Remplace par le prix unitaire réel en centimes d'euros (ex: 24,90 € => 2490)
+                unit_amount: 0, // Remplace par le prix unitaire réel en centimes d'euros (ex: 24,90 € => 2490)
               },
               quantity: quantity, // Quantité d'articles choisie dans le formulaire
             },
           ],
           mode: 'payment',
-          success_url: 'https://smart-z.vercel.app/success',
-          cancel_url: 'https://smart-z.vercel.app/cancel',
+          success_url: 'https://smart-z.fr/success',
+          cancel_url: 'https://smart-z.fr/cancel',
           metadata: {
             firstName,
             lastName,
