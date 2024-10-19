@@ -21,8 +21,8 @@ export default async function handler(req, res) {
     const mailOptions = {
       from: process.env.EMAIL_USER, // L'adresse de l'expéditeur
       to: 'sasmarteez@gmail.com', // L'adresse de réception (là où tu veux envoyer l'email)
-      subject: 'Test d\'envoi de mail avec Nodemailer',
-      text: 'Ceci est un test d\'envoi de mail avec Nodemailer depuis Vercel.', // Contenu du mail
+      subject: "Test d'envoi de mail avec Nodemailer",
+      text: "Ceci est un test d'envoi de mail avec Nodemailer depuis Vercel.", // Contenu du mail
     };
 
     // Envoyer l'email
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       await transporter.sendMail(mailOptions);
       console.log('Email envoyé avec succès');
     } catch (error) {
-      console.error('Erreur lors de l\'envoi de l\'email:', error);
+      console.error("Erreur lors de l'envoi de l'email:", error);
     }
   } else {
     res.setHeader('Allow', 'POST');
