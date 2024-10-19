@@ -1,36 +1,30 @@
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
+
+// Assurez-vous d'avoir configuré votre clé API SendGrid dans les variables d'environnement
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    // Recevoir les données Stripe (pour plus tard)
+    // Recevoir les données Stripe (si nécessaire plus tard)
     const stripeEvent = req.body;
 
     // Retourner immédiatement 200 à Stripe pour confirmer la réception
     res.status(200).send('Webhook reçu');
 
-    // Configurer Nodemailer pour envoyer des mails
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER, // Ton adresse Gmail
-        pass: process.env.EMAIL_PASS, // Le mot de passe d'application généré
-      },
-    });
-
-    // Options de l'email
-    const mailOptions = {
-      from: process.env.EMAIL_USER, // L'adresse de l'expéditeur
-      to: 'sasmarteez@gmail.com', // L'adresse de réception (là où tu veux envoyer l'email)
-      subject: "Test d'envoi de mail avec Nodemailer",
-      text: "Ceci est un test d'envoi de mail avec Nodemailer depuis Vercel.", // Contenu du mail
+    // Créer l'email à envoyer
+    const msg = {
+      to: 'sasmarteez@gmail.com', // Destinataire
+      from: 'sasmarteez@gmail.com', // L'adresse vérifiée que tu as définie
+      subject: 'Test d\'envoi de mail avec SendGrid',
+      text: 'Ceci est un test d\'envoi de mail avec SendGrid depuis Vercel.',
     };
 
     // Envoyer l'email
     try {
-      await transporter.sendMail(mailOptions);
+      await sgMail.send(msg);
       console.log('Email envoyé avec succès');
     } catch (error) {
-      console.error("Erreur lors de l'envoi de l'email:", error);
+      console.error('Erreur lors de l\'envoi de l\'email:', error);
     }
   } else {
     res.setHeader('Allow', 'POST');
