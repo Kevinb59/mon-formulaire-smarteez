@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
     // Transférer les métadonnées à Google Apps Script
     try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbzzzOOLvGDtTOeKhr68_SN6Lpevaq8XU_vCD27BSFtCvMRDXCZCd5NH1nhqcylfnG4/exec', {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbyFxmxDFdPTa42DMb-qXw6ptFgwbBxhAtUW-r8gEvm9zPIBjSuLXPa8QJtMIyp1hIIS/exec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
