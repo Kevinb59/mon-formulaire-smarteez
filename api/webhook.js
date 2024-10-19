@@ -8,6 +8,8 @@ export default async function handler(req, res) {
     // Recevoir les données Stripe (si nécessaire)
     const stripeEvent = req.body;
 
+    console.log('Stripe event reçu:', stripeEvent);
+
     // Retourner immédiatement 200 à Stripe pour confirmer la réception
     res.status(200).send('Webhook reçu');
 
@@ -18,6 +20,8 @@ export default async function handler(req, res) {
       subject: 'Test d\'envoi d\'email avec SendGrid',
       text: 'Ceci est un test d\'envoi d\'email avec SendGrid depuis Vercel.',
     };
+
+    console.log('Tentative d\'envoi d\'email avec SendGrid...');
 
     try {
       // Envoyer l'email via SendGrid
