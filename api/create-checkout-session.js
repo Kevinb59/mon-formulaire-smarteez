@@ -4,9 +4,9 @@ const cors = require('cors');
 export default async function handler(req, res) {
   // Activer CORS pour permettre les requêtes cross-origin
   const corsHandler = cors({
-    origin: 'https://smart-z.vercel.app', // Le domaine depuis lequel les requêtes sont acceptées
+    origin: ['https://smart-z.vercel.app', 'https://www.smart-z.fr'], // Ajoute les deux domaines ici
     methods: ['POST'],
-    allowedHeaders: ['Content-Type']
+    allowedHeaders: ['Content-Type'],
   });
 
   return corsHandler(req, res, async () => {
