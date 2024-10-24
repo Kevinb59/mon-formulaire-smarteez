@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Z - Politique de Confidentialité</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/Favicon.png">
+
+    <!-- Inclusion du style du menu -->
+    <link rel="stylesheet" href="menu.css">
+
+    <!-- Styles CSS de la page -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b7d397;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .frame {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        h1 {
+            color: #5b287c;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #5b287c;
+            font-size: 1.8em;
+            margin-top: 30px;
+        }
+        p, ul {
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin-left: 20px;
+        }
+        a {
+            color: #5b287c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Inclusion du menu -->
+<script>
+    async function includeMenu() {
+        const response = await fetch('menu.html');
+        const menuContent = await response.text();
+        document.body.insertAdjacentHTML('afterbegin', menuContent);
+
+        // Script pour rendre le menu fonctionnel
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const menu = document.querySelector('.menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+
+    // Inclure le menu dès que la page est chargée
+    window.addEventListener('DOMContentLoaded', includeMenu);
+</script>
+
+<div class="container">
+    <div class="frame">
+        <h1>Politique de Confidentialité</h1>
+
+        <h2>1. Données collectées</h2>
+        <p>Nous collectons les données suivantes lors de votre commande sur notre site www.smart-z.fr :</p>
+        <ul>
+            <li>Nom et prénom</li>
+            <li>Adresse email</li>
+            <li>Adresse de livraison</li>
+            <li>Marque et modèle de téléphone</li>
+            <li>Image fournie pour la personnalisation de la coque</li>
+        </ul>
+
+        <h2>2. Finalité de la collecte des données</h2>
+        <p>Les données collectées sont utilisées uniquement pour le traitement de votre commande et la personnalisation de votre coque. Aucun partage de ces données n'est effectué avec des tiers, à l'exception de :</p>
+        <ul>
+            <li>Stripe pour le traitement des paiements sécurisés</li>
+            <li>Les services de livraison pour l'expédition de votre commande</li>
+        </ul>
+
+        <h2>3. Sécurité des données</h2>
+        <p>Les données collectées sont utilisées pour l'envoi d'emails de confirmation de commande au client, ainsi que d'un email à notre société pour signaler une nouvelle commande. Aucune base de données n'est utilisée pour stocker vos données au-delà des besoins liés à la commande.</p>
+
+        <h2>4. Durée de conservation des données</h2>
+        <p>Les données sont conservées le temps de traiter et expédier votre commande, puis pendant un mois après l'expédition. Passé ce délai, elles sont supprimées de nos systèmes.</p>
+
+        <h2>5. Vos droits</h2>
+        <p>Conformément à la législation en vigueur, vous disposez de droits relatifs à vos données personnelles, notamment :</p>
+        <ul>
+            <li>Droit d'accès à vos données</li>
+            <li>Droit de rectification de vos données</li>
+            <li>Droit à l'effacement de vos données après un mois suivant l'expédition</li>
+        </ul>
+        <p>Pour toute demande concernant vos données personnelles, vous pouvez nous contacter à l'adresse suivante : <a href="mailto:contact@smart-z.fr">contact@smart-z.fr</a>.</p>
+
+        <p><a href="https://www.smart-z.fr">Retour à l'accueil</a></p>
+    </div>
+</div>
+
+</body>
+</html>
