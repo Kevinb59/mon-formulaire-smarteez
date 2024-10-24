@@ -246,97 +246,97 @@
     </form>
 </div>
 
-<!-- Stripe JS -->
-<script src="https://js.stripe.com/v3/"></script>
+    <!-- Stripe JS -->
+    <script src="https://js.stripe.com/v3/"></script>
 
-<script>
-    // Initialisation de Stripe avec la clé publique
-    const stripe = Stripe('pk_live_51Q0pzz03Hgw1RFXSzt25jEyuePM3OKHJXvpIcmZhA0J0ndyLraMJxxYuGVBI4SV3VnAnLtOEoHV5E4i8xxZAKwKC00dGkEtZ1P');
-
-    const paymentButton = document.getElementById('paymentButton');
+    <script>
+        // Initialisation de Stripe avec la clé publique
+        const stripe = Stripe('pk_live_51Q0pzz03Hgw1RFXSzt25jEyuePM3OKHJXvpIcmZhA0J0ndyLraMJxxYuGVBI4SV3VnAnLtOEoHV5E4i8xxZAKwKC00dGkEtZ1P');
     
-    paymentButton.addEventListener('click', async function() {
-        const firstName = document.getElementById('firstName').value;
-        const lastName = document.getElementById('lastName').value;
-        const email = document.getElementById('email').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const address2 = document.getElementById('address2').value;
-        const city = document.getElementById('city').value;
-        const postalCode = document.getElementById('postalCode').value;
-        const phoneBrand = document.getElementById('phoneBrand').value;
-        const phoneModel = document.getElementById('phoneModel').value;
-        const customText = document.getElementById('customText').value;
-        const quantity = document.getElementById('quantity').value;
-
-        const fileInput = document.getElementById('file');
-        const file = fileInput.files[0];
-
-        let imageUrl = '';
-
-        if (file) {
-            const cloudName = 'dwjkmwlyb';
-            const uploadPreset = 'smarteez_orders';
-            const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
-
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', uploadPreset);
-
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-                if (data.secure_url) {
-                    imageUrl = data.secure_url;
-                } else {
-                    console.error("Erreur lors de l'upload de l'image : ", data.error);
+        const paymentButton = document.getElementById('paymentButton');
+        
+        paymentButton.addEventListener('click', async function() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const address2 = document.getElementById('address2').value;
+            const city = document.getElementById('city').value;
+            const postalCode = document.getElementById('postalCode').value;
+            const phoneBrand = document.getElementById('phoneBrand').value;
+            const phoneModel = document.getElementById('phoneModel').value;
+            const customText = document.getElementById('customText').value;
+            const quantity = document.getElementById('quantity').value;
+    
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+    
+            let imageUrl = '';
+    
+            if (file) {
+                const cloudName = 'dwjkmwlyb';
+                const uploadPreset = 'smarteez_orders';
+                const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+    
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', uploadPreset);
+    
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    });
+    
+                    const data = await response.json();
+                    if (data.secure_url) {
+                        imageUrl = data.secure_url;
+                    } else {
+                        console.error("Erreur lors de l'upload de l'image : ", data.error);
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Erreur lors de l\'upload vers Cloudinary:', error);
                     return;
                 }
+            }
+    
+            try {
+                const response = await fetch('https://smart-z.vercel.app/api/create-checkout-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        firstName,
+                        lastName,
+                        email,
+                        phone,
+                        address,
+                        address2,
+                        city,
+                        postalCode,
+                        phoneBrand,
+                        phoneModel,
+                        customText,
+                        imageUrl,
+                        quantity
+                    }),
+                });
+    
+                const session = await response.json();
+                if (session.id) {
+                    return stripe.redirectToCheckout({ sessionId: session.id });
+                } else {
+                    console.error("Erreur lors de la création de la session Stripe : ", session);
+                }
             } catch (error) {
-                console.error('Erreur lors de l\'upload vers Cloudinary:', error);
-                return;
+                console.error('Erreur lors de la création de la session Stripe :', error);
             }
-        }
-
-        try {
-            const response = await fetch('https://smart-z.vercel.app/api/create-checkout-session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    firstName,
-                    lastName,
-                    email,
-                    phone,
-                    address,
-                    address2,
-                    city,
-                    postalCode,
-                    phoneBrand,
-                    phoneModel,
-                    customText,
-                    imageUrl,
-                    quantity
-                }),
-            });
-
-            const session = await response.json();
-            if (session.id) {
-                return stripe.redirectToCheckout({ sessionId: session.id });
-            } else {
-                console.error("Erreur lors de la création de la session Stripe : ", session);
-            }
-        } catch (error) {
-            console.error('Erreur lors de la création de la session Stripe :', error);
-        }
-    });
-</script>
-
+        });
+    </script>
+    
     <script>
         function updateFontExample() {
             const selectedFont = document.getElementById('fontChoice').value;
