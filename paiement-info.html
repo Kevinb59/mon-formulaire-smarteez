@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Z - Paiement Sécurisé</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/Favicon.png">
+
+    <!-- Inclusion du style du menu -->
+    <link rel="stylesheet" href="menu.css">
+
+    <!-- Styles CSS de la page -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b7d397;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .frame {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        h1 {
+            color: #5b287c;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #5b287c;
+            font-size: 1.8em;
+            margin-top: 30px;
+        }
+        p, ul {
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin-left: 20px;
+        }
+        a {
+            color: #5b287c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Inclusion du menu -->
+<script>
+    async function includeMenu() {
+        const response = await fetch('menu.html');
+        const menuContent = await response.text();
+        document.body.insertAdjacentHTML('afterbegin', menuContent);
+
+        // Script pour rendre le menu fonctionnel
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const menu = document.querySelector('.menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+
+    // Inclure le menu dès que la page est chargée
+    window.addEventListener('DOMContentLoaded', includeMenu);
+</script>
+
+<div class="container">
+    <div class="frame">
+        <img src="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/Logo%20Smart-Z.jpg" alt="Smarteez">
+        <h1>Paiement Sécurisé</h1>
+
+        <h2>1. Solutions de paiement disponibles</h2>
+        <p>Nous utilisons exclusivement la plateforme Stripe pour le traitement sécurisé des paiements sur notre site www.smart-z.fr. Stripe offre une large gamme de moyens de paiement, incluant :</p>
+        <ul>
+            <li>Cartes bancaires (Visa, Mastercard, American Express, etc.)</li>
+            <li>PayPal</li>
+            <li>GooglePay et ApplePay</li>
+            <li>Link, BLIK, Bancontact, EPS, iDEAL, Klarna</li>
+        </ul>
+
+        <h2>2. Sécurité des transactions</h2>
+        <p>Toutes les transactions effectuées sur notre site sont sécurisées grâce aux mesures mises en place par Stripe. Vos données bancaires sont cryptées et protégées conformément aux normes de sécurité les plus strictes (conformité PCI DSS). De plus, Stripe utilise l'authentification forte des paiements (3D Secure) pour vérifier l'identité des clients lors des transactions.</p>
+
+        <h2>3. Confidentialité des informations bancaires</h2>
+        <p>Vos informations bancaires ne sont jamais transmises directement à notre entreprise. Elles sont traitées exclusivement par Stripe, garantissant ainsi la confidentialité et la sécurité de vos données.</p>
+
+        <h2>4. Service client</h2>
+        <p>Pour toute question ou problème lié à un paiement, n'hésitez pas à nous contacter à l'adresse suivante : <a href="mailto:contact@smart-z.fr">contact@smart-z.fr</a>.</p>
+
+        <p><a href="https://www.smart-z.fr">Retour à l'accueil</a></p>
+    </div>
+</div>
+
+</body>
+</html>
