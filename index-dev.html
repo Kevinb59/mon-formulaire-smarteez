@@ -7,7 +7,8 @@
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/Favicon.png">
-
+    
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400&family=Courier+New:wght@400&family=Georgia:wght@400&family=Times+New+Roman:wght@400&family=Verdana:wght@400&family=Roboto:wght@400&family=Open+Sans:wght@400&family=Lobster:wght@400&family=Montserrat:wght@400&family=Raleway:wght@400&display=swap" rel="stylesheet">
     <!-- Styles CSS -->
     <style>
         body {
@@ -221,6 +222,7 @@
 
             <label for="fontChoice">Choisir une police d'écriture :</label>
             
+            <label for="fontChoice">Choisir une police d'écriture :</label>
             <select id="fontChoice" name="fontChoice" onchange="updateFontExample()">
                 <option value="Arial" style="font-family: Arial;">Arial</option>
                 <option value="Times New Roman" style="font-family: 'Times New Roman';">Times New Roman</option>
@@ -228,9 +230,6 @@
                 <option value="Georgia" style="font-family: Georgia;">Georgia</option>
                 <option value="Verdana" style="font-family: Verdana;">Verdana</option>
             </select>
-            
-            <!-- Aperçu de la police -->
-            <div id="fontPreview" style="font-size: 20px; margin-top: 10px;">Exemple de texte</div>
 
             <label for="quantity">Quantité de coques :</label>
             <input type="number" id="quantity" name="quantity" placeholder="Nombre de coques" value="1" min="1" required>
@@ -341,9 +340,10 @@
     <script>
         function updateFontExample() {
             const selectedFont = document.getElementById('fontChoice').value;
-            const fontPreview = document.getElementById('fontPreview');
-            fontPreview.style.fontFamily = selectedFont;
+            const customText = document.getElementById('customText');
+            customText.style.fontFamily = selectedFont;
         }
     </script>
+    
 </body>
 </html>
