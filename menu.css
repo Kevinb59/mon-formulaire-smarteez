@@ -1,6 +1,8 @@
 /* menu.css */
 .menu-toggle {
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .menu-icon {
