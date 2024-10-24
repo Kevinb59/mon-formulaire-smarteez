@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Z - Conditions Générales de Vente</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/Favicon.png">
+
+    <!-- Inclusion du style du menu -->
+    <link rel="stylesheet" href="menu.css">
+
+    <!-- Styles CSS de la page -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b7d397;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .frame {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        h1 {
+            color: #5b287c;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #5b287c;
+            font-size: 1.8em;
+            margin-top: 30px;
+        }
+        p, ul {
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin-left: 20px;
+        }
+        a {
+            color: #5b287c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Inclusion du menu -->
+<script>
+    async function includeMenu() {
+        const response = await fetch('menu.html');
+        const menuContent = await response.text();
+        document.body.insertAdjacentHTML('afterbegin', menuContent);
+
+        // Script pour rendre le menu fonctionnel
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const menu = document.querySelector('.menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+
+    // Inclure le menu dès que la page est chargée
+    window.addEventListener('DOMContentLoaded', includeMenu);
+</script>
+
+<div class="container">
+    <div class="frame">
+        <h1>Conditions Générales de Vente</h1>
+
+        <h2>1. Présentation des produits</h2>
+        <p>Tous les produits vendus sur www.smart-z.fr sont des coques de téléphone personnalisées, fabriquées en TPU avec une impression UV de haute qualité. Chaque coque est fabriquée sur mesure selon les choix du client.</p>
+
+        <h2>2. Tarification et paiement</h2>
+        <p>Les prix affichés sur notre site incluent la TVA. Le paiement est effectué via la plateforme sécurisée Stripe, offrant une large gamme de moyens de paiement tels que : Paypal, Link, GooglePay, ApplePay, BLIK, Bancontact, EPS, iDEAL, Klarna, et autres.</p>
+
+        <h2>3. Processus de commande</h2>
+        <p>Pour passer une commande, le client doit remplir le formulaire de personnalisation disponible sur le site. Une fois le formulaire rempli, une session de paiement est créée et le client reçoit un email de confirmation récapitulant les détails de sa commande.</p>
+
+        <h2>4. Livraison</h2>
+        <p>Nous livrons uniquement en France. Les délais de livraison sont ceux généralement constatés pour les envois standards et les frais de livraison sont inclus dans le prix affiché.</p>
+
+        <h2>5. Droit de rétractation</h2>
+        <p>Conformément à la législation en vigueur, les produits personnalisés ne bénéficient pas du droit de rétractation. Toutes les commandes passées sont considérées comme définitives.</p>
+
+        <h2>6. Garanties</h2>
+        <p>Pour connaître les conditions de garantie, veuillez consulter notre <a href="garanties.html">page dédiée aux garanties</a>.</p>
+
+        <h2>7. Responsabilité</h2>
+        <p>SAS Smart-Z ne saurait être tenue responsable des dommages résultant d'une mauvaise utilisation des produits ou d'une erreur lors de la commande. La responsabilité de l’entreprise est également dégagée en cas de défaillance de services externes tels que les prestataires de paiement et de livraison.</p>
+
+        <h2>8. Données personnelles</h2>
+        <p>Les données personnelles collectées sont traitées conformément à notre <a href="confidentialite.html">Politique de Confidentialité</a>.</p>
+
+        <p><a href="https://www.smart-z.fr">Retour à l'accueil</a></p>
+    </div>
+</div>
+
+</body>
+</html>
