@@ -2,14 +2,14 @@
 .menu-toggle {
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: center; /* Aligner verticalement l'icône et le texte "Menu" */
+    margin: 10px;
 }
 
 .menu-icon {
     font-size: 30px;
     cursor: pointer;
-    display: inline-block;
-    margin: 10px;
+    color: #333; /* Couleur de l'icône et du texte */
 }
 
 .menu {
