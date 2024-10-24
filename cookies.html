@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Z - Politique des Cookies</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/Favicon.png">
+
+    <!-- Inclusion du style du menu -->
+    <link rel="stylesheet" href="menu.css">
+
+    <!-- Styles CSS de la page -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b7d397;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .frame {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        h1 {
+            color: #5b287c;
+            font-size: 2.5em;
+        }
+        p, ul {
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+        a {
+            color: #5b287c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Inclusion du menu -->
+<script>
+    async function includeMenu() {
+        const response = await fetch('menu.html');
+        const menuContent = await response.text();
+        document.body.insertAdjacentHTML('afterbegin', menuContent);
+
+        // Script pour rendre le menu fonctionnel
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const menu = document.querySelector('.menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+
+    // Inclure le menu dès que la page est chargée
+    window.addEventListener('DOMContentLoaded', includeMenu);
+</script>
+
+<div class="container">
+    <div class="frame">
+        <h1>Politique des Cookies</h1>
+        
+        <p>Nous n'utilisons pas de cookies sur notre site www.smart-z.fr. Aucun cookie n'est stocké sur votre appareil via notre site web, que ce soit pour des raisons de navigation, d'analyse ou de publicité.</p>
+        <p>Pour toute question concernant l’utilisation des données ou la confidentialité, veuillez consulter notre <a href="confidentialite.html">Politique de Confidentialité</a> ou nous contacter directement.</p>
+
+        <p><a href="https://www.smart-z.fr">Retour à l'accueil</a></p>
+    </div>
+</div>
+
+</body>
+</html>
