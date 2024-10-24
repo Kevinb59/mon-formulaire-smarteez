@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Z - Droit de Rétractation</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/Favicon.png">
+
+    <!-- Inclusion du style du menu -->
+    <link rel="stylesheet" href="menu.css">
+
+    <!-- Styles CSS de la page -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b7d397;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .frame {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        h1 {
+            color: #5b287c;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #5b287c;
+            font-size: 1.8em;
+            margin-top: 30px;
+        }
+        p, ul {
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+        a {
+            color: #5b287c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Inclusion du menu -->
+<script>
+    async function includeMenu() {
+        const response = await fetch('menu.html');
+        const menuContent = await response.text();
+        document.body.insertAdjacentHTML('afterbegin', menuContent);
+
+        // Script pour rendre le menu fonctionnel
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const menu = document.querySelector('.menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+
+    // Inclure le menu dès que la page est chargée
+    window.addEventListener('DOMContentLoaded', includeMenu);
+</script>
+
+<div class="container">
+    <div class="frame">
+        <img src="https://raw.githubusercontent.com/Kevinb59/mon-formulaire-smarteez/refs/heads/main/Logo%20Smart-Z.jpg" alt="Smarteez">
+        <h1>Droit de Rétractation</h1>
+
+        <h2>1. Absence de droit de rétractation pour les produits personnalisés</h2>
+        <p>Conformément à l'Article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux produits confectionnés selon les spécifications du consommateur ou nettement personnalisés. En effet, chaque coque de téléphone vendue sur notre site www.smart-z.fr est fabriquée sur mesure, selon vos choix de personnalisation.</p>
+
+        <h2>2. Réclamations en cas de défaut de fabrication</h2>
+        <p>Bien que le droit de rétractation ne s'applique pas aux produits personnalisés, nous acceptons les réclamations en cas de défaut de fabrication majeur. Si vous constatez un défaut sur la coque reçue, nous vous invitons à nous contacter à l'adresse suivante : <a href="mailto:contact@smart-z.fr">contact@smart-z.fr</a>.</p>
+
+        <h2>3. Garantie des produits</h2>
+        <p>Pour plus d’informations sur les garanties applicables à nos produits, veuillez consulter notre <a href="garanties.html">page dédiée aux garanties</a>.</p>
+
+        <p><a href="https://www.smart-z.fr">Retour à l'accueil</a></p>
+    </div>
+</div>
+
+</body>
+</html>
