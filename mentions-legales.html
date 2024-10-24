@@ -58,6 +58,26 @@
             font-weight: bold;
         }
     </style>
+
+    <link rel="stylesheet" href="menu.css">
+
+    <script>
+        async function includeMenu() {
+            const response = await fetch('menu.html');
+            const menuContent = await response.text();
+            document.body.insertAdjacentHTML('afterbegin', menuContent);
+    
+            // Ajoutez ici le script pour rendre le menu fonctionnel
+            document.getElementById('menuToggle').addEventListener('click', function() {
+                const menu = document.querySelector('.menu');
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            });
+        }
+    
+        // Inclure le menu dès que la page est chargée
+        window.addEventListener('DOMContentLoaded', includeMenu);
+    </script>
+    
 </head>
 <body>
 
