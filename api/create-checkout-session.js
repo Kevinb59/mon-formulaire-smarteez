@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       const {
         firstName, lastName, email, phone,
         address, address2, city, postalCode,
-        phoneBrand, phoneModel, customText, imageUrl, quantity
+        phoneBrand, phoneModel, customText, imageUrl, quantity, fontChoice
       } = req.body;
 
       try {
@@ -50,6 +50,7 @@ export default async function handler(req, res) {
             customText,
             imageUrl,
             quantity,
+            fontChoice,
           },
         });
 
